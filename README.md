@@ -14,6 +14,8 @@ Every push to `main` runs `.github/workflows/deploy.yml`, which:
 If the check fails, nothing is published and the live site stays as it was. The URL never changes.
 You can watch each deploy under the repo's **Actions** tab.
 
+Repo setting this depends on: **Settings → Pages → Source = GitHub Actions**. (With "Deploy from a branch", GitHub would also publish every push without running the tests.)
+
 ## Editing
 
 | What | Where |
