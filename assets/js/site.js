@@ -37,19 +37,36 @@
 
 // Photo viewer for the Photography page
 (function () {
+  var shots = Array.prototype.slice.call(document.querySelectorAll('.shot'));
+  if (!shots.length) return;
   var dlg = document.getElementById('lightbox');
-  if (!dlg || typeof dlg.showModal !== 'function') return; // without <dialog>, photos simply stay inline
-  var shots = Array.prototype.slice.call(document.querySelectorAll('.gallery .shot'));
+  if (!dlg) {
+    dlg = document.createElement('dialog');
+    dlg.className = 'lightbox'; dlg.id = 'lightbox'; dlg.setAttribute('aria-label', 'Photo viewer');
+    dlg.innerHTML = '<figure><img id="lb-img" alt=""><figcaption id="lb-cap"></figcaption></figure>' +
+      '<div class="lb-controls"><button type="button" id="lb-prev" aria-label="Previous photo">&larr;</button>' +
+      '<button type="button" id="lb-close" aria-label="Close">Close</button>' +
+      '<button type="button" id="lb-next" aria-label="Next photo">&rarr;</button></div>';
+    document.body.appendChild(dlg);
+  }
+  if (typeof dlg.showModal !== 'function') return; // without <dialog>, photos simply stay inline
   var img = document.getElementById('lb-img'), cap = document.getElementById('lb-cap');
-  var i = 0;
+  var set = shots, i = 0;
   function show(n) {
-    i = (n + shots.length) % shots.length;
-    var src = shots[i].querySelector('img');
-    var fc = shots[i].parentElement.querySelector('figcaption');
+    i = (n + set.length) % set.length;
+    var src = set[i].querySelector('img');
+    var fc = set[i].parentElement.querySelector('figcaption');
     img.src = src.getAttribute('src'); img.alt = src.alt;
     cap.textContent = fc ? fc.textContent : '';
   }
-  shots.forEach(function (b, n) { b.addEventListener('click', function () { show(n); dlg.showModal(); }); });
+  shots.forEach(function (b) {
+    b.addEventListener('click', function () {
+      // On project pages, step through that project's photos only; on the gallery, through all of them.
+      var group = b.closest('.case-photos');
+      set = group ? Array.prototype.slice.call(group.querySelectorAll('.shot')) : shots.filter(function (x) { return !x.closest('.case-photos'); });
+      show(set.indexOf(b)); dlg.showModal();
+    });
+  });
   document.getElementById('lb-prev').addEventListener('click', function () { show(i - 1); });
   document.getElementById('lb-next').addEventListener('click', function () { show(i + 1); });
   document.getElementById('lb-close').addEventListener('click', function () { dlg.close(); });
