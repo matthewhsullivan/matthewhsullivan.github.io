@@ -2,7 +2,17 @@
 
 Source for my portfolio, live at **https://msullivanh06-byte.github.io**.
 
-Plain HTML and CSS, no build step. GitHub Pages serves the `main` branch as is.
+Plain HTML, CSS, and a little JavaScript. No build step.
+
+## How updates go live
+
+Every push to `main` runs `.github/workflows/deploy.yml`, which:
+
+1. Checks that every internal link, image, and video path exists (`scripts/check_links.py`).
+2. Publishes the site to GitHub Pages.
+
+If the check fails, nothing is published and the live site stays as it was. The URL never changes.
+You can watch each deploy under the repo's **Actions** tab.
 
 ## Editing
 
