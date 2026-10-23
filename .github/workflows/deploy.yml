@@ -30,6 +30,11 @@ jobs:
         run: |
           mkdir _site
           cp -r *.html assets _site/
+          # Stamp CSS/JS links with this commit so browsers fetch fresh copies after every update.
+          v="${GITHUB_SHA::7}"
+          sed -i -e "s|assets/css/site.css\"|assets/css/site.css?v=$v\"|g" \
+                 -e "s|assets/js/site.js\"|assets/js/site.js?v=$v\"|g" _site/*.html
+          grep -c "site.css?v=$v" _site/index.html
       - uses: actions/configure-pages@v5
       - uses: actions/upload-pages-artifact@v4
         with:
