@@ -98,11 +98,22 @@ hr.rule { border: 0; border-top: 1px solid var(--rule); margin: 0; }
 
 /* ---------- hero ---------- */
 .hero { background: var(--sand); padding-block: clamp(48px, 7vw, 88px); }
-.hero .wrap { display: grid; grid-template-columns: minmax(0, 5fr) minmax(0, 7fr); gap: clamp(32px, 6vw, 80px); align-items: center; }
-.portrait { position: relative; max-width: 420px; width: 100%; justify-self: center; }
+/* Row 1: photo centered on the headline, intro and buttons.
+   Row 2: "Right now" as a full-width strip under a hairline. */
+.hero .wrap {
+  display: grid;
+  grid-template-columns: clamp(220px, 38vw, 470px) minmax(0, 1fr);
+  grid-template-areas: "photo intro" "more more";
+  column-gap: clamp(40px, 5.5vw, 80px);
+  row-gap: clamp(36px, 4.5vw, 56px);
+}
+.portrait { grid-area: photo; align-self: center; position: relative; width: 100%; max-width: 470px; margin: 0; }
+.hero-intro { grid-area: intro; align-self: center; display: grid; gap: 20px; min-width: 0; }
+.hero-intro .links { margin-top: 6px; }
+.hero-more { grid-area: more; min-width: 0; border-top: 1px solid var(--rule); padding-top: 22px; }
+.hero-more .now { display: grid; grid-template-columns: 7.5rem repeat(3, minmax(0, 1fr)); gap: 8px clamp(18px, 3vw, 36px); align-items: baseline; }
 .portrait img { width: 100%; aspect-ratio: 1 / 1; object-fit: cover; object-position: 50% 50%; border-radius: 50%; }
 .portrait figcaption { position: absolute; right: 2%; bottom: 6%; background: var(--paper); color: var(--ink-soft); font-family: var(--f-mono); font-size: 0.7rem; letter-spacing: 0.06em; padding: 6px 10px; border-radius: 2px 10px 2px 10px; }
-.hero-copy { display: grid; gap: 22px; min-width: 0; }
 .hero h1 { font-size: var(--step-4); }
 .hero h1 em { font-style: italic; }
 .hero .sub { font-family: var(--f-display); font-size: var(--step-1); color: var(--ink); }
@@ -219,11 +230,10 @@ hr.rule { border: 0; border-top: 1px solid var(--rule); margin: 0; }
 
 /* ---------- motion ---------- */
 @media (prefers-reduced-motion: no-preference) {
-  .hero-copy > *, .portrait { animation: rise .7s cubic-bezier(.2,.7,.2,1) both; }
-  .hero-copy > *:nth-child(2) { animation-delay: .06s; }
-  .hero-copy > *:nth-child(3) { animation-delay: .12s; }
-  .hero-copy > *:nth-child(4) { animation-delay: .18s; }
-  .hero-copy > *:nth-child(5) { animation-delay: .24s; }
+  .hero-intro > *, .hero-more, .portrait { animation: rise .7s cubic-bezier(.2,.7,.2,1) both; }
+  .hero-intro > *:nth-child(2) { animation-delay: .06s; }
+  .hero-intro > *:nth-child(3) { animation-delay: .12s; }
+  .hero-more { animation-delay: .18s; }
   @keyframes rise { from { transform: translateY(10px); opacity: .001; } to { transform: none; opacity: 1; } }
 }
 @media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } }
@@ -237,8 +247,9 @@ hr.rule { border: 0; border-top: 1px solid var(--rule); margin: 0; }
   .photo-card blockquote { left: 4%; }
 }
 @media (max-width: 720px) {
-  .hero .wrap { grid-template-columns: minmax(0, 1fr); }
-  .portrait { max-width: 220px; justify-self: start; }
+  .hero .wrap { grid-template-columns: minmax(0, 1fr); grid-template-areas: "photo" "intro" "more"; row-gap: 28px; }
+  .hero-more .now { grid-template-columns: minmax(0, 1fr); gap: 6px; }
+  .portrait { max-width: 240px; justify-self: start; }
   .portrait figcaption { right: -6%; }
   .plist a { grid-template-columns: minmax(0, 1fr) auto; }
   .plist .date { grid-column: 1 / -1; }
