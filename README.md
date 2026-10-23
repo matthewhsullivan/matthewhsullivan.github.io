@@ -1,6 +1,6 @@
 # Matthew Sullivan — personal site
 
-Source for my portfolio, live at **https://msullivanh06-byte.github.io**.
+Source for my portfolio, live at **https://matthewhsullivan.github.io**.
 
 Plain HTML, CSS, and a little JavaScript. No build step.
 
