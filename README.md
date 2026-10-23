@@ -8,7 +8,7 @@ Plain HTML, CSS, and a little JavaScript. No build step.
 
 Every push to `main` runs `.github/workflows/deploy.yml`, which:
 
-1. Checks that every internal link, image, and video path exists (`scripts/check_links.py`).
+1. Tests the site (`scripts/check_site.py`): links, images, videos, and the résumé exist; #section links resolve; HTML tags are balanced; no duplicate ids or missing alt text; no garbled text; CSS references exist; files fit GitHub's limits. JavaScript is syntax-checked with `node --check`.
 2. Publishes the site to GitHub Pages.
 
 If the check fails, nothing is published and the live site stays as it was. The URL never changes.

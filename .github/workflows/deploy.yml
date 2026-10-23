@@ -1,5 +1,6 @@
-# Publishes the site to GitHub Pages on every push to main.
-# If any page links to a file that doesn't exist, the deploy stops and the live site stays as it was.
+# Tests the site, then publishes it to GitHub Pages, on every push to main.
+# If any test fails, nothing is published and the live site stays as it was.
+# Requires: Settings > Pages > Source = "GitHub Actions" (this workflow is the only publisher).
 name: Deploy site
 
 on:
@@ -21,8 +22,10 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v6
-      - name: Check internal links, images, and videos
-        run: python3 scripts/check_links.py
+      - name: Test site (links, files, HTML, text, CSS, file sizes)
+        run: python3 scripts/check_site.py
+      - name: Test JavaScript syntax
+        run: for f in assets/js/*.js; do node --check "$f"; done
       - name: Collect site files
         run: |
           mkdir _site
