@@ -223,7 +223,7 @@ hr.rule { border: 0; border-top: 1px solid var(--rule); margin: 0; }
 .about-section { display: grid; gap: 14px; padding-top: 28px; }
 .about-section:first-child { padding-top: 0; }
 .about-section h2 { font-size: var(--step-2); }
-.offhours { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 18px 28px; margin: 6px 0 0; }
+.offhours { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 26px 32px; margin: 6px 0 0; }
 .offhours div { border-top: 1px solid var(--rule); padding-top: 10px; }
 .offhours dt { font-family: var(--f-display); font-size: 1.12rem; color: var(--ink); }
 .offhours dd { margin: 4px 0 0; color: var(--ink-soft); font-size: 0.95rem; }
