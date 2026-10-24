@@ -139,6 +139,7 @@ hr.rule { border: 0; border-top: 1px solid var(--rule); margin: 0; }
 .stats { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 18px; margin: 6px 0 0; padding: 0; container-type: inline-size; }
 .stats div { border-top: 2px solid var(--accent); padding-top: 12px; }
 .stats:has(> div:only-child) { grid-template-columns: minmax(0, 24rem); }
+@media (min-width: 721px) { .stats:has(> div:nth-child(2):last-child) { grid-template-columns: repeat(2, minmax(0, 20rem)); } }
 .stats dt { font-family: var(--f-body); font-weight: 800; font-size: clamp(1.75rem, 8.2cqi, 3.1rem); letter-spacing: -0.035em; color: var(--accent); line-height: 1; font-variant-numeric: tabular-nums lining-nums; }
 .stats dd { margin: 8px 0 0; font-size: 0.88rem; color: var(--ink-soft); line-height: 1.4; }
 
