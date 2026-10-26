@@ -89,6 +89,7 @@ p { margin: 0; }
 }
 .btn:hover { color: var(--button-ink); background: var(--accent-deep); }
 .btn.ghost { background: transparent; color: var(--ink); box-shadow: inset 0 0 0 1px var(--rule); }
+.btn.btn-email { text-transform: none; letter-spacing: 0.01em; font-size: 0.82rem; }
 .btn.ghost:hover { box-shadow: inset 0 0 0 1px var(--accent); color: var(--accent); background: transparent; }
 .links { display: flex; flex-wrap: wrap; gap: 10px; }
 section { padding-block: clamp(56px, 8vw, 96px); }
@@ -110,6 +111,7 @@ hr.rule { border: 0; border-top: 1px solid var(--rule); margin: 0; }
 .portrait { grid-area: photo; align-self: center; position: relative; width: 100%; max-width: 470px; margin: 0; }
 .hero-intro { grid-area: intro; align-self: center; display: grid; gap: 20px; min-width: 0; }
 .hero-intro .links { margin-top: 6px; }
+.hero-intro .contact-links { margin-top: -8px; }
 .seeking { display: inline-flex; align-items: center; gap: 12px; justify-self: start; max-width: 100%;
   font-size: 0.92rem; line-height: 1.35; color: var(--ink); background: var(--paper);
   border: 1px solid var(--rule); border-radius: 12px; padding: 10px 18px 10px 14px; }
