@@ -298,6 +298,12 @@ hr.rule { border: 0; border-top: 1px solid var(--rule); margin: 0; }
 .case-photos figure { flex: var(--r) 1 0; min-width: 0; margin: 0; display: grid; gap: 6px; }
 .case-photos .shot img { aspect-ratio: var(--r); object-fit: cover; }
 .meta-photo { margin-top: 10px; max-width: 260px; }
+.org-logo { margin: 10px 0 0; display: grid; gap: 8px; justify-items: start; }
+.org-logo img { width: 112px; height: 112px; border-radius: 18px; box-shadow: 0 0 0 1px var(--rule); }
+.org-logo figcaption { font-size: 0.82rem; color: var(--ink-soft); }
+/* Design work (flyers) sits in a tinted panel so it doesn't read as event photography. */
+.design-panel { margin-top: 14px; max-width: 520px; background: var(--sand); border-radius: 14px; padding: 16px; gap: 16px; }
+.design-panel .shot img { border-radius: 4px; box-shadow: 0 6px 18px -10px rgba(28, 35, 48, .45); }
 .case-photos figure:only-child { flex-grow: 1; }
 /* "lead" layout: first photo full width, the rest share the row below. */
 .case-photos.lead { flex-wrap: wrap; gap: 16px 14px; }
@@ -319,6 +325,8 @@ hr.rule { border: 0; border-top: 1px solid var(--rule); margin: 0; }
   .lens-shot.wide { flex-basis: 100%; order: -1; }
   .case-photos { flex-wrap: wrap; }
   .case-photos figure { flex: 1 1 100%; }
+  .case-photos.design-panel { flex-wrap: nowrap; padding: 12px; gap: 10px; }
+  .case-photos.design-panel figure { flex: var(--r) 1 0; }
   .exp-head { grid-template-columns: minmax(0, 1fr); }
   .exp-head img { order: -1; width: 150px; }
 }
