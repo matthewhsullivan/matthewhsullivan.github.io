@@ -203,6 +203,9 @@ hr.rule { border: 0; border-top: 1px solid var(--rule); margin: 0; }
 .case-body li::marker { color: var(--accent); }
 .case-body p { max-width: 64ch; }
 .case .reels { max-width: 560px; }
+.reels.three { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+@media (min-width: 901px) { .feature:has(.reels.three) { grid-template-columns: minmax(0, 4fr) minmax(0, 8fr); } }
+.case .reels.three { max-width: 780px; }
 .case .stats { max-width: 640px; }
 .badge { display: inline-block; font-family: var(--f-label); font-size: 0.68rem; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; color: var(--accent); border: 1px solid currentColor; padding: 2px 8px; border-radius: 2px 8px 2px 8px; }
 
@@ -339,6 +342,7 @@ hr.rule { border: 0; border-top: 1px solid var(--rule); margin: 0; }
 html { -webkit-tap-highlight-color: rgba(31, 59, 99, .12); }
 @media (max-width: 900px) {
   .feature .reels { max-width: 560px; }
+  .feature .reels.three { max-width: 780px; }
 }
 @media (max-width: 560px) {
   /* Header: name on its own row, then all five links on one even row. */
@@ -351,6 +355,12 @@ html { -webkit-tap-highlight-color: rgba(31, 59, 99, .12); }
          margin-inline: calc(-1 * var(--gutter-l)) calc(-1 * var(--gutter-r)); padding-inline: var(--gutter-l) var(--gutter-r); }
   .toc::-webkit-scrollbar { display: none; }
   .toc a { white-space: nowrap; }
+}
+@media (max-width: 560px) {
+  /* Three reels: one swipeable row on phones so each video stays a usable size. */
+  .reels.three { display: flex; overflow-x: auto; scroll-snap-type: x mandatory; scrollbar-width: none; gap: 12px; }
+  .reels.three::-webkit-scrollbar { display: none; }
+  .reels.three .reel { flex: 0 0 62%; scroll-snap-align: start; }
 }
 @media (max-width: 360px) {
   .nav { gap: 2px; }
