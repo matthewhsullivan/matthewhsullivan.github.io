@@ -101,6 +101,8 @@ def main():
             if path.startswith("/"):  # root-relative (used by 404.html)
                 path = path.lstrip("/") or "index.html"
             target = path or name
+            if target.endswith("/") or target in (".", "./"):
+                target = target.rstrip("./") + ("/" if target.rstrip("./") else "") + "index.html"
             if not (ROOT / target).is_file():
                 errors.append(f"{name}: links to missing file '{target}'")
                 continue
