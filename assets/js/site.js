@@ -138,3 +138,58 @@
   }
   sync();
 })();
+
+/* Scroll reveal: things drift up and fade in as they enter the screen.
+   Only elements still below the fold get hidden, so nothing flashes on load.
+   Items entering together are staggered in reading order. Off for reduced motion. */
+(function () {
+  if (!('IntersectionObserver' in window)) return;
+  if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+
+  var groups = [
+    '.section-head', '.band-link',
+    '.folders > .folder', '.threads > .thread',
+    '.feature-copy > *', '.phone-stage .phone', '.phone-tabs',
+    '.tools > li', '.certs > li',
+    '.lens-wrap .camera', '.lens-copy > *',
+    '.about-teaser .prose > *', '.about-teaser .photo-card',
+    '.contact .prose > *', '.contact dl > div',
+    '.case', '.case-photos > *',
+    '.ledger-group > h2', '.entry',
+    '.set-head', '.g-row',
+    '.about-grid > *', '.about-section'
+  ].join(',');
+  var pops = '.phone-stage .bubble';
+
+  var vh = window.innerHeight;
+  function below(el) { return el.getBoundingClientRect().top > vh * 0.9; }
+  function skip(el) { return el.closest('.hero, .page-head') || el.parentElement.closest('.rv, .rv-pop'); }
+
+  var io = new IntersectionObserver(function (entries) {
+    var hits = entries.filter(function (e) { return e.isIntersecting; }).map(function (e) { return e.target; });
+    hits.sort(function (a, b) { return a.compareDocumentPosition(b) & 4 ? -1 : 1; });
+    hits.forEach(function (el, i) {
+      io.unobserve(el);
+      var base = el.classList.contains('rv-pop') ? 0.45 : 0;
+      el.style.setProperty('--rv-d', (base + Math.min(i, 6) * 0.09).toFixed(2) + 's');
+      requestAnimationFrame(function () { el.classList.add('in'); });
+      var done = function (ev) {
+        if (ev && (ev.target !== el || (ev.propertyName !== 'translate' && ev.propertyName !== 'scale'))) return;
+        el.classList.remove('rv', 'rv-pop', 'in');
+        el.style.removeProperty('--rv-d');
+        el.removeEventListener('transitionend', done);
+      };
+      el.addEventListener('transitionend', done);
+      setTimeout(done, 3000);
+    });
+  }, { rootMargin: '0px 0px -8% 0px', threshold: 0.08 });
+
+  document.querySelectorAll(groups).forEach(function (el) {
+    if (skip(el) || !below(el)) return;
+    el.classList.add('rv'); io.observe(el);
+  });
+  document.querySelectorAll(pops).forEach(function (el) {
+    if (!below(el)) return;
+    el.classList.add('rv-pop'); io.observe(el);
+  });
+})();

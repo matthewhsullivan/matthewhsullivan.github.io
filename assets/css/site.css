@@ -517,3 +517,12 @@ html { -webkit-tap-highlight-color: rgba(31, 59, 99, .12); }
 @media (prefers-reduced-motion: reduce) {
   .cam-screen img { transition: none; }
 }
+
+/* Scroll reveal (classes added by site.js only for off-screen items; removed once shown) */
+.rv { opacity: 0; translate: 0 26px;
+  transition: opacity .9s cubic-bezier(.33,0,.2,1) var(--rv-d, 0s), translate 1.2s cubic-bezier(.16,1,.3,1) var(--rv-d, 0s); }
+.rv-pop { opacity: 0; scale: .82;
+  transition: opacity .6s ease-out var(--rv-d, 0s), scale .9s cubic-bezier(.3,1.35,.5,1) var(--rv-d, 0s); }
+.rv.in { opacity: 1; translate: 0 0; }
+.rv-pop.in { opacity: 1; scale: 1; }
+@media (prefers-reduced-motion: reduce) { .rv, .rv-pop { opacity: 1; translate: none; scale: none; transition: none; } }
