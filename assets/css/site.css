@@ -726,3 +726,6 @@ html { -webkit-tap-highlight-color: rgba(31, 59, 99, .12); }
 .folder { padding-top: 66px; }
 .folder-papers { height: 150px; }
 .folder-papers span:last-child { top: 22px; }
+/* keep folder text readable on hover in light and dark mode */
+.folder .folder-link, .folder .folder-link:hover, .folder .folder-link:focus-visible { color: inherit; }
+.folder li a:hover, .folder li a:focus-visible { color: var(--fold-ink); }
