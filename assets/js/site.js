@@ -139,57 +139,94 @@
   sync();
 })();
 
-/* Scroll reveal: things drift up and fade in as they enter the screen.
-   Only elements still below the fold get hidden, so nothing flashes on load.
-   Items entering together are staggered in reading order. Off for reduced motion. */
+/* Scroll reveal: elements enter with motion that suits them (rise, tilt, pop,
+   slide, photo "window" opening, headings word by word, stats counting up).
+   Only off-screen elements are prepared, so nothing flickers on load. Each item
+   animates once, then its classes are removed. Off for reduced motion. */
 (function () {
   if (!('IntersectionObserver' in window)) return;
   if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
 
-  var groups = [
-    '.section-head', '.band-link',
-    '.folders > .folder', '.threads > .thread',
-    '.feature-copy > *', '.phone-stage .phone', '.phone-tabs',
-    '.tools > li', '.certs > li',
-    '.lens-wrap .camera', '.lens-copy > *',
-    '.about-teaser .prose > *', '.about-teaser .photo-card',
-    '.contact .prose > *', '.contact dl > div',
-    '.case', '.case-photos > *',
-    '.ledger-group > h2', '.entry',
-    '.set-head', '.g-row',
-    '.about-grid > *', '.about-section'
-  ].join(',');
-  var pops = '.phone-stage .bubble';
+  var variants = [
+    ['.section-head > .eyebrow, .section-head > p, .band-link', 'up'],
+    ['.section-head > h2, .lens-copy h2, .about-teaser h2, .contact h2', 'words'],
+    ['.folders > .folder, .certs > li', 'tilt'],
+    ['.threads > .thread, .entry, .ledger-group > h2, .set-head, .about-section', 'up'],
+    ['.feature-copy > :not(h2)', 'up'],
+    ['.phone-stage .phone', 'rise-big'],
+    ['.phone-stage .bubble', 'pop'],
+    ['.phone-tabs', 'up'],
+    ['.tools > li', 'pop'],
+    ['.lens-wrap .camera', 'from-left'],
+    ['.lens-copy > :not(h2)', 'from-right'],
+    ['.about-teaser .prose > :not(h2), .contact .prose > :not(h2), .contact dl > div', 'up'],
+    ['.about-teaser .photo-card, .case-photos > *, .g-row > *, .reels', 'window'],
+    ['.case-body > *, .about-grid > *', 'up']
+  ];
 
   var vh = window.innerHeight;
   function below(el) { return el.getBoundingClientRect().top > vh * 0.9; }
-  function skip(el) { return el.closest('.hero, .page-head') || el.parentElement.closest('.rv, .rv-pop'); }
+  function skip(el) { return el.closest('.hero, .page-head') || (el.parentElement && el.parentElement.closest('.rv')); }
+
+  function splitWords(h) {
+    if (h.children.length) return false;           // only plain-text headings
+    var text = h.textContent.trim().split(/\s+/);
+    h.setAttribute('aria-label', h.textContent.trim());
+    h.textContent = '';
+    text.forEach(function (w, i) {
+      var o = document.createElement('span'); o.className = 'w'; o.setAttribute('aria-hidden', 'true');
+      var n = document.createElement('span'); n.className = 'wi'; n.textContent = w;
+      n.style.transitionDelay = 'calc(var(--rv-d, 0s) + ' + (i * 0.06).toFixed(2) + 's)';
+      o.appendChild(n); h.appendChild(o);
+      if (i < text.length - 1) h.appendChild(document.createTextNode(' '));
+    });
+    return true;
+  }
+
+  function countUp(dt) {
+    var raw = dt.textContent, m = raw.match(/^([^\d]*)([\d,]+)(.*)$/);
+    if (!m) return;
+    var target = parseInt(m[2].replace(/,/g, ''), 10), comma = m[2].indexOf(',') > -1, t0 = null, dur = 1400;
+    dt.style.minWidth = dt.offsetWidth + 'px';
+    function fmt(v) { return comma ? v.toLocaleString('en-US') : String(v); }
+    function step(ts) {
+      if (!t0) t0 = ts;
+      var k = Math.min(1, (ts - t0) / dur), e = 1 - Math.pow(1 - k, 4);
+      dt.textContent = m[1] + fmt(Math.round(target * e)) + m[3];
+      if (k < 1) requestAnimationFrame(step); else dt.textContent = raw;
+    }
+    dt.textContent = m[1] + '0' + m[3];
+    requestAnimationFrame(step);
+  }
 
   var io = new IntersectionObserver(function (entries) {
     var hits = entries.filter(function (e) { return e.isIntersecting; }).map(function (e) { return e.target; });
     hits.sort(function (a, b) { return a.compareDocumentPosition(b) & 4 ? -1 : 1; });
     hits.forEach(function (el, i) {
       io.unobserve(el);
-      var base = el.classList.contains('rv-pop') ? 0.45 : 0;
-      el.style.setProperty('--rv-d', (base + Math.min(i, 6) * 0.09).toFixed(2) + 's');
-      requestAnimationFrame(function () { el.classList.add('in'); });
-      var done = function (ev) {
-        if (ev && (ev.target !== el || (ev.propertyName !== 'translate' && ev.propertyName !== 'scale'))) return;
-        el.classList.remove('rv', 'rv-pop', 'in');
-        el.style.removeProperty('--rv-d');
-        el.removeEventListener('transitionend', done);
-      };
-      el.addEventListener('transitionend', done);
-      setTimeout(done, 3000);
+      if (el.classList.contains('stats')) {
+        el.querySelectorAll('dt').forEach(function (dt, j) { setTimeout(function () { countUp(dt); }, 250 + j * 150); });
+        if (!el.classList.contains('rv')) return;
+      }
+      var base = el.getAttribute('data-rv') === 'pop' && el.classList.contains('bubble') ? 0.5 : 0;
+      el.style.setProperty('--rv-d', (base + Math.min(i, 8) * 0.11).toFixed(2) + 's');
+      requestAnimationFrame(function () { requestAnimationFrame(function () { el.classList.add('in'); }); });
+      setTimeout(function () {
+        el.classList.remove('rv', 'in'); el.removeAttribute('data-rv'); el.style.removeProperty('--rv-d');
+      }, 2600 + (base + Math.min(i, 8) * 0.11) * 1000);
     });
-  }, { rootMargin: '0px 0px -8% 0px', threshold: 0.08 });
+  }, { rootMargin: '0px 0px -10% 0px', threshold: 0.1 });
 
-  document.querySelectorAll(groups).forEach(function (el) {
-    if (skip(el) || !below(el)) return;
-    el.classList.add('rv'); io.observe(el);
+  variants.forEach(function (v) {
+    document.querySelectorAll(v[0]).forEach(function (el) {
+      if (el.classList.contains('rv') || skip(el) || !below(el)) return;
+      if (v[1] === 'words' && !splitWords(el)) { el.setAttribute('data-rv', 'up'); }
+      else el.setAttribute('data-rv', v[1]);
+      el.classList.add('rv');
+      io.observe(el);
+    });
   });
-  document.querySelectorAll(pops).forEach(function (el) {
-    if (!below(el)) return;
-    el.classList.add('rv-pop'); io.observe(el);
-  });
+  document.querySelectorAll('.stats').forEach(function (s) { if (below(s)) io.observe(s); });
+  // alternate folder / cert tilt direction so they don't all lean the same way
+  document.querySelectorAll('[data-rv="tilt"]').forEach(function (el, i) { el.style.setProperty('--rv-r', (i % 2 ? 3 : -3) + 'deg'); });
 })();
