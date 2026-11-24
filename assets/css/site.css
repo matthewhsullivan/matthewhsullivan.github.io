@@ -754,3 +754,15 @@ html { -webkit-tap-highlight-color: rgba(31, 59, 99, .12); }
 @media (hover: hover) { .thread:hover { transform: rotate(0deg) translateY(-6px); } }
 .thread { background-position: 12px 18px, 0 50px, 0 0; }
 .thread h3 { font-weight: 700; font-size: 1.38rem; letter-spacing: -.005em; }
+/* header: round photo of Matthew links home; the name shows on hover (desktop) */
+.brand::before { content: none; }
+.brand { gap: 12px; }
+.brand img { width: 46px; height: 46px; border-radius: 50%; object-fit: cover; display: block;
+  box-shadow: 0 0 0 2px var(--paper), 0 0 0 3.5px var(--accent); transition: transform .35s cubic-bezier(.34,1.5,.5,1), box-shadow .3s ease; }
+.brand .brand-name { font-size: 1.05rem; opacity: 0; translate: -6px 0; transition: opacity .3s ease, translate .35s cubic-bezier(.2,.8,.2,1); white-space: nowrap; }
+@media (hover: hover) {
+  .brand:hover img { transform: scale(1.08) rotate(-4deg); }
+  .brand:hover .brand-name { opacity: 1; translate: 0 0; }
+}
+.brand:focus-visible .brand-name { opacity: 1; translate: 0 0; }
+@media (max-width: 720px) { .brand .brand-name { display: none; } .brand img { width: 42px; height: 42px; } }
