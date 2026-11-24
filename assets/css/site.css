@@ -632,3 +632,12 @@ html { -webkit-tap-highlight-color: rgba(31, 59, 99, .12); }
 .script-h .w { overflow: visible !important; padding-bottom: 0; margin-bottom: 0; }
 .band-navy .section-head:has(> .script-h) p { font-size: 1.08rem; }
 .section-head .script-h { -webkit-text-stroke: .012em currentColor; paint-order: stroke fill; margin-bottom: .22em; }
+/* featured: heading + copy stack in the left column; the phone spans both rows on the right */
+@media (min-width: 901px) {
+  .featured-sec .wrap { display: grid; grid-template-columns: minmax(0, 5fr) minmax(0, 6fr); grid-template-areas: "head phone" "copy phone";
+    grid-template-rows: auto 1fr; column-gap: clamp(28px, 4vw, 56px); }
+  .featured-sec .feature { display: contents; }
+  .featured-sec .section-head { grid-area: head; margin-bottom: clamp(20px, 2.4vw, 30px); align-self: end; }
+  .featured-sec .feature-copy { grid-area: copy; align-self: start; }
+  .featured-sec .phone-stage { grid-area: phone; align-self: center; }
+}
