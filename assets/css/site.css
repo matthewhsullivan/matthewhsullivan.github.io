@@ -732,3 +732,4 @@ html { -webkit-tap-highlight-color: rgba(31, 59, 99, .12); }
 /* papers sit inside the folder's width instead of spilling past the sides */
 .folder-papers { left: 6%; right: 5%; }
 .folder-papers span:first-child { left: 10%; right: 22%; }
+.side-project .stats { margin-top: 6px; max-width: 520px; }
