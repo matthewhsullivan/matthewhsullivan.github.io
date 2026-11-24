@@ -109,7 +109,7 @@ def main():
 
     for css in ROOT.glob("assets/**/*.css"):
         for ref in re.findall(r"url\(\s*['\"]?([^'\")]+)", css.read_text(encoding="utf-8")):
-            if ref.startswith(("data:", "http:", "https:", "//", "#")):
+            if ref.startswith(("data:", "http:", "https:", "//", "#", "%23")):  # %23 = "#" inside inline SVG data URIs
                 continue
             if not (css.parent / ref).resolve().is_file():
                 errors.append(f"{css.relative_to(ROOT)}: url({ref}) points to a missing file")
