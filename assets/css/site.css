@@ -407,7 +407,7 @@ html { -webkit-tap-highlight-color: rgba(31, 59, 99, .12); }
 
 /* ---------- phone with KSA reels ---------- */
 .phone-stage { position: relative; display: grid; justify-items: center; gap: 18px; padding: 10px 0; min-width: 0; }
-.phone { width: clamp(220px, 24vw, 286px); aspect-ratio: 9 / 19; background: var(--device); border-radius: 42px; padding: 10px;
+.phone { width: clamp(240px, 30vw, 380px); aspect-ratio: 9 / 19; background: var(--device); border-radius: 42px; padding: 10px;
   box-shadow: 0 30px 50px -28px rgba(20, 24, 32, .6), inset 0 0 0 2px var(--device-2); position: relative; }
 .phone::before { content: ""; position: absolute; top: 18px; left: 50%; width: 30%; height: 18px; transform: translateX(-50%); background: var(--device); border-radius: 12px; z-index: 2; }
 .phone-screen { width: 100%; height: 100%; border-radius: 33px; overflow: hidden; background: #000; }
@@ -615,3 +615,20 @@ html { -webkit-tap-highlight-color: rgba(31, 59, 99, .12); }
 .section-head:has(> .cta-h) { max-width: none; gap: 16px; }
 .cta-h { text-wrap: balance; }
 .lens-copy .cta-h { margin-bottom: 4px; }
+
+/* bigger phone: fills its column and sits level with the copy */
+@media (min-width: 901px) { .featured-sec .feature { align-items: center; grid-template-columns: minmax(0, 5fr) minmax(0, 6fr); } }
+.phone { border-radius: 52px; padding: 12px; }
+.phone-screen { border-radius: 41px; }
+.phone::before { top: 22px; height: 22px; }
+.bubble { font-size: clamp(.86rem, 1vw, 1rem); }
+@media (max-width: 900px) { .phone { width: min(330px, 78vw); } }
+@media (min-width: 901px) { .featured-sec .phone-tabs { flex-wrap: nowrap; } .featured-sec .phone-tabs button { white-space: nowrap; } .featured-sec .feature { column-gap: clamp(24px, 3vw, 48px); } }
+
+/* "My Work" in the same script as "portfolio" */
+.section-head:has(> .script-h) { max-width: 62ch; gap: 4px; }
+.section-head .script-h { font-family: var(--f-script); font-weight: 400; text-transform: none; letter-spacing: 0; line-height: .95;
+  font-size: clamp(5rem, 13vw, 10rem); color: var(--band-ink); margin: -.12em 0 0 -.04em; }
+.script-h .w { overflow: visible !important; padding-bottom: 0; margin-bottom: 0; }
+.band-navy .section-head:has(> .script-h) p { font-size: 1.08rem; }
+.section-head .script-h { -webkit-text-stroke: .012em currentColor; paint-order: stroke fill; margin-bottom: .22em; }
