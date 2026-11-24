@@ -766,3 +766,55 @@ html { -webkit-tap-highlight-color: rgba(31, 59, 99, .12); }
 }
 .brand:focus-visible .brand-name { opacity: 1; translate: 0 0; }
 @media (max-width: 720px) { .brand .brand-name { display: none; } .brand img { width: 42px; height: 42px; } }
+
+/* ---------- homepage hero: flowing-lines background ---------- */
+:root .hero.has-bg {
+  /* the hero is always dark now, so it uses the dark-mode palette in both themes */
+  --paper: #0B1224; --sand: #0B1224; --ink: #F1EBDD; --ink-soft: #AEB8C8; --rule: rgba(190, 205, 230, .16);
+  --accent: #B5CCEC; --accent-deep: #D3E2F6; --button: #F1EBDD; --button-ink: #0B1224; --script: #C9A877;
+  position: relative; isolation: isolate; overflow: clip; color: var(--ink);
+  background: #050A19; background-image: none;
+}
+.hero-bg { position: absolute; inset: 0; z-index: -1; pointer-events: none; }
+.hero-bg-img, .hero-bg-shine { position: absolute; inset: -6%; background: url("../img/hero-waves.webp") center 62% / cover no-repeat; }
+@media (max-width: 720px) { .hero-bg-img, .hero-bg-shine { background-image: url("../img/hero-waves-sm.webp"); background-position: 30% 70%; } }
+.hero-bg-img { animation: waves-drift 38s ease-in-out infinite alternate; }
+/* a band of light that travels along the gold lines */
+.hero-bg-shine { filter: brightness(2.1) saturate(1.35); mix-blend-mode: screen; opacity: .75;
+  -webkit-mask-image: linear-gradient(105deg, transparent 0 38%, #000 50%, transparent 62% 100%);
+          mask-image: linear-gradient(105deg, transparent 0 38%, #000 50%, transparent 62% 100%);
+  -webkit-mask-size: 300% 100%; mask-size: 300% 100%;
+  animation: waves-drift 38s ease-in-out infinite alternate, waves-shine 11s cubic-bezier(.45,0,.3,1) infinite; }
+/* soft light that follows the cursor, plus vignette and a fade into the next section */
+.hero-bg-glow { position: absolute; inset: 0;
+  background:
+    linear-gradient(180deg, rgba(5, 10, 25, .35), transparent 22%, transparent 80%, var(--hero-after) 100%),
+    radial-gradient(520px circle at var(--mx, 70%) var(--my, 30%), rgba(150, 175, 235, .13), transparent 60%),
+    radial-gradient(120% 90% at 50% 40%, transparent 55%, rgba(2, 5, 14, .55));
+  transition: background-position .2s; }
+.hero.has-bg .hero-bg::after { content: ""; position: absolute; inset: 0; background: var(--grain-light); opacity: .9; }
+.hero-bg-glow { z-index: 1; }
+@keyframes waves-drift { 0% { transform: scale(1) translate(0, 0) rotate(0deg); } 50% { transform: scale(1.07) translate(-1.6%, 1.2%) rotate(.6deg); } 100% { transform: scale(1.04) translate(1.4%, -1%) rotate(-.4deg); } }
+@keyframes waves-shine { 0% { -webkit-mask-position: 100% 0; mask-position: 100% 0; } 100% { -webkit-mask-position: 0% 0; mask-position: 0% 0; } }
+/* parallax: the background scrolls slower than the page */
+@supports (animation-timeline: scroll()) {
+  @media (prefers-reduced-motion: no-preference) {
+    .hero-bg { animation: waves-parallax linear both; animation-timeline: scroll(root); animation-range: 0 100vh; }
+    @keyframes waves-parallax { to { translate: 0 22%; opacity: .55; } }
+  }
+}
+@media (prefers-reduced-motion: reduce) { .hero-bg-img, .hero-bg-shine { animation: none; } .hero-bg-shine { opacity: .35; } }
+/* text and cards that sit on the dark background */
+.hero.has-bg .bigname h1 { color: #F1EBDD; text-shadow: 0 2px 30px rgba(0, 0, 0, .35); }
+.hero.has-bg .bn-script { color: #D6B98A; }
+.hero.has-bg .seeking { background: rgba(12, 20, 40, .55); border-color: rgba(190, 205, 230, .2); -webkit-backdrop-filter: blur(8px); backdrop-filter: blur(8px); }
+.hero.has-bg .portrait img:not(.husky-badge) { box-shadow: 0 30px 60px -30px rgba(0, 0, 0, .8), 0 0 0 1px rgba(255, 255, 255, .08); }
+:root { --hero-after: var(--band); }
+
+@media (max-width: 720px) { .hero-bg-glow::before { content: ""; position: absolute; inset: 0; background: rgba(4, 9, 22, .42); } }
+.hero.has-bg + .band-navy { margin-top: -1px; }
+:root .hero.has-bg + .band-navy {
+  background-image: var(--grain-light),
+    radial-gradient(70% 60% at 85% 45%, rgba(140, 175, 225, .16), transparent 65%),
+    radial-gradient(70% 80% at 105% 110%, rgba(4, 10, 24, .5), transparent 60%);
+}

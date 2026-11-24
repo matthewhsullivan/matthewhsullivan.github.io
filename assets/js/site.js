@@ -254,3 +254,21 @@
   all.forEach(function (el) { enter.observe(el); leave.observe(el); });
   document.querySelectorAll('[data-rv="tilt"]').forEach(function (el, i) { el.style.setProperty('--rv-r', (i % 2 ? 3 : -3) + 'deg'); });
 })();
+
+/* Hero background: a soft glow follows the cursor (mouse/trackpad only). */
+(function () {
+  var hero = document.querySelector('.hero.has-bg');
+  if (!hero || !window.matchMedia('(pointer: fine)').matches) return;
+  if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+  var tx = 70, ty = 30, x = 70, y = 30, raf = 0;
+  function tick() {
+    x += (tx - x) * 0.08; y += (ty - y) * 0.08;
+    hero.style.setProperty('--mx', x.toFixed(2) + '%'); hero.style.setProperty('--my', y.toFixed(2) + '%');
+    raf = (Math.abs(tx - x) + Math.abs(ty - y) > 0.05) ? requestAnimationFrame(tick) : 0;
+  }
+  hero.addEventListener('pointermove', function (e) {
+    var r = hero.getBoundingClientRect();
+    tx = (e.clientX - r.left) / r.width * 100; ty = (e.clientY - r.top) / r.height * 100;
+    if (!raf) raf = requestAnimationFrame(tick);
+  });
+})();
