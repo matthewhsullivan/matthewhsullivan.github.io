@@ -150,8 +150,8 @@
   var variants = [
     ['.section-head > .eyebrow, .section-head > p, .band-link', 'up'],
     ['.section-head > h2, .lens-copy h2, .about-teaser h2, .contact h2', 'words'],
-    ['.folders > .folder, .certs > li', 'tilt'],
-    ['.threads > .thread, .entry, .ledger-group > h2, .set-head, .about-section', 'up'],
+    ['.folders > .folder, .threads > .thread, .certs > li', 'tilt'],
+    ['.entry, .ledger-group > h2, .set-head, .about-section', 'up'],
     ['.feature-copy > :not(h2)', 'up'],
     ['.phone-stage .phone', 'rise-big'],
     ['.phone-stage .bubble', 'pop'],

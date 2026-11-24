@@ -753,3 +753,4 @@ html { -webkit-tap-highlight-color: rgba(31, 59, 99, .12); }
 .thread:nth-child(4) { --tilt: 1.8deg; --pin: #F2B92B; }
 @media (hover: hover) { .thread:hover { transform: rotate(0deg) translateY(-6px); } }
 .thread { background-position: 12px 18px, 0 50px, 0 0; }
+.thread h3 { font-weight: 700; font-size: 1.38rem; letter-spacing: -.005em; }
