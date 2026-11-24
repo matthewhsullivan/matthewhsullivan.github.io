@@ -733,3 +733,23 @@ html { -webkit-tap-highlight-color: rgba(31, 59, 99, .12); }
 .folder-papers { left: 6%; right: 5%; }
 .folder-papers span:first-child { left: 10%; right: 22%; }
 .side-project .stats { margin-top: 6px; max-width: 520px; }
+
+/* ---------- "threads" as pinned notebook pages ---------- */
+.threads { gap: clamp(22px, 3vw, 40px); padding-top: 10px; filter: drop-shadow(0 12px 14px rgba(10, 18, 32, .22)); }
+.thread { position: relative; border-top: 0; padding: 46px 20px 34px; gap: 6px; transform: rotate(var(--tilt, -1.5deg));
+  background:
+    radial-gradient(circle at 50% 50%, var(--paper) 0 4.2px, transparent 4.8px) 12px 18px / 22px 10px repeat-x,
+    repeating-linear-gradient(180deg, transparent 0 27px, rgba(96, 140, 210, .35) 27px 28px) 0 44px / 100% calc(100% - 44px) no-repeat,
+    #FCFBF7;
+  clip-path: polygon(0 0, 100% 0, 100% calc(100% - 5px), 95% calc(100% - 9px), 91% calc(100% - 5px), 86% calc(100% - 2px), 82% calc(100% - 6px), 76% calc(100% - 1px), 72% calc(100% - 1px), 67% calc(100% - 7px), 64% calc(100% - 10px), 58% calc(100% - 7px), 53% calc(100% - 2px), 50% calc(100% - 5px), 47% calc(100% - 2px), 43% calc(100% - 0px), 39% calc(100% - 4px), 33% calc(100% - 5px), 28% calc(100% - 5px), 23% calc(100% - 5px), 19% calc(100% - 10px), 13% calc(100% - 8px), 8% calc(100% - 3px), 5% calc(100% - 3px), 1% calc(100% - 8px), 0 calc(100% - 8px)); transition: transform .45s cubic-bezier(.2,.8,.2,1); }
+.thread::before { content: ""; position: absolute; top: 4px; left: 50%; width: 18px; height: 18px; margin-left: -9px; border-radius: 50%;
+  background: radial-gradient(circle at 35% 30%, rgba(255,255,255,.75) 0 2px, transparent 3px), var(--pin, #3DBA5B);
+  box-shadow: inset -2px -3px 4px rgba(0,0,0,.25), 1px 4px 4px rgba(0,0,0,.28); z-index: 1; }
+.thread h3 { color: #1D2A3F; font-size: 1.32rem; line-height: 28px; margin: 0; }
+.thread p { color: #3B4352; font-size: 0.96rem; line-height: 28px; margin: 0; }
+.thread:nth-child(1) { --tilt: -1.6deg; --pin: #3DBA5B; }
+.thread:nth-child(2) { --tilt: 1.2deg; --pin: #E5484D; }
+.thread:nth-child(3) { --tilt: -.8deg; --pin: #3E7BE0; }
+.thread:nth-child(4) { --tilt: 1.8deg; --pin: #F2B92B; }
+@media (hover: hover) { .thread:hover { transform: rotate(0deg) translateY(-6px); } }
+.thread { background-position: 12px 18px, 0 50px, 0 0; }
