@@ -157,15 +157,16 @@
     ['.phone-stage .bubble', 'pop'],
     ['.phone-tabs', 'up'],
     ['.tools > li', 'pop'],
+    ['.touch-h, .touch-mail', 'up'],
+    ['.touch-icons > li', 'pop'],
     ['.lens-wrap .camera', 'from-left'],
     ['.lens-copy > :not(h2)', 'from-right'],
-    ['.about-teaser .prose > :not(h2), .contact .prose > :not(h2), .contact dl > div', 'up'],
+    ['.about-teaser .prose > :not(h2), .contact .prose > :not(h2)', 'up'],
     ['.about-teaser .photo-card, .case-photos > *, .g-row > *, .reels', 'window'],
     ['.case-body > *, .about-grid > *', 'up']
   ];
 
   var vh = window.innerHeight;
-  function below(el) { return el.getBoundingClientRect().top > vh * 0.9; }
   function skip(el) { return el.closest('.hero, .page-head') || (el.parentElement && el.parentElement.closest('.rv')); }
 
   function splitWords(h) {
@@ -176,7 +177,7 @@
     text.forEach(function (w, i) {
       var o = document.createElement('span'); o.className = 'w'; o.setAttribute('aria-hidden', 'true');
       var n = document.createElement('span'); n.className = 'wi'; n.textContent = w;
-      n.style.transitionDelay = 'calc(var(--rv-d, 0s) + ' + (i * 0.06).toFixed(2) + 's)';
+      n.style.transitionDelay = 'calc(var(--rv-d, 0s) + ' + (i * 0.07).toFixed(2) + 's)';
       o.appendChild(n); h.appendChild(o);
       if (i < text.length - 1) h.appendChild(document.createTextNode(' '));
     });
@@ -184,12 +185,16 @@
   }
 
   function countUp(dt) {
-    var raw = dt.textContent, m = raw.match(/^([^\d]*)([\d,]+)(.*)$/);
+    var raw = dt.getAttribute('data-raw') || dt.textContent;
+    dt.setAttribute('data-raw', raw);
+    var m = raw.match(/^([^\d]*)([\d,]+)(.*)$/);
     if (!m) return;
-    var target = parseInt(m[2].replace(/,/g, ''), 10), comma = m[2].indexOf(',') > -1, t0 = null, dur = 1400;
+    var target = parseInt(m[2].replace(/,/g, ''), 10), comma = m[2].indexOf(',') > -1, t0 = null, dur = 1500;
+    var run = (dt._run || 0) + 1; dt._run = run;
     dt.style.minWidth = dt.offsetWidth + 'px';
     function fmt(v) { return comma ? v.toLocaleString('en-US') : String(v); }
     function step(ts) {
+      if (dt._run !== run) return;
       if (!t0) t0 = ts;
       var k = Math.min(1, (ts - t0) / dur), e = 1 - Math.pow(1 - k, 4);
       dt.textContent = m[1] + fmt(Math.round(target * e)) + m[3];
@@ -199,34 +204,52 @@
     requestAnimationFrame(step);
   }
 
-  var io = new IntersectionObserver(function (entries) {
-    var hits = entries.filter(function (e) { return e.isIntersecting; }).map(function (e) { return e.target; });
-    hits.sort(function (a, b) { return a.compareDocumentPosition(b) & 4 ? -1 : 1; });
-    hits.forEach(function (el, i) {
-      io.unobserve(el);
+  function reveal(list) {
+    list.sort(function (a, b) { return a.compareDocumentPosition(b) & 4 ? -1 : 1; });
+    list.forEach(function (el, i) {
       if (el.classList.contains('stats')) {
         el.querySelectorAll('dt').forEach(function (dt, j) { setTimeout(function () { countUp(dt); }, 250 + j * 150); });
         if (!el.classList.contains('rv')) return;
       }
-      var base = el.getAttribute('data-rv') === 'pop' && el.classList.contains('bubble') ? 0.5 : 0;
-      el.style.setProperty('--rv-d', (base + Math.min(i, 8) * 0.11).toFixed(2) + 's');
+      if (el.classList.contains('in')) return;
+      var base = el.classList.contains('bubble') ? 0.5 : 0;
+      el.style.setProperty('--rv-d', (base + Math.min(i, 8) * 0.1).toFixed(2) + 's');
       requestAnimationFrame(function () { requestAnimationFrame(function () { el.classList.add('in'); }); });
-      setTimeout(function () {
-        el.classList.remove('rv', 'in'); el.removeAttribute('data-rv'); el.style.removeProperty('--rv-d');
-      }, 2600 + (base + Math.min(i, 8) * 0.11) * 1000);
     });
-  }, { rootMargin: '0px 0px -10% 0px', threshold: 0.1 });
+  }
+  // Re-arm an element once it has dropped fully below the screen (you scrolled back up
+  // past it), so it plays again the next time you scroll down. Items above the screen
+  // stay in place, so scrolling up never shows things flying in backwards.
+  function rearm(el) {
+    if (el.classList.contains('stats')) { el.querySelectorAll('dt').forEach(function (dt) { dt._run = (dt._run || 0) + 1; if (dt.getAttribute('data-raw')) dt.textContent = dt.getAttribute('data-raw'); }); }
+    if (!el.classList.contains('in')) return;
+    el.classList.add('rv-reset'); el.classList.remove('in'); el.style.removeProperty('--rv-d');
+    void el.offsetWidth;
+    el.classList.remove('rv-reset');
+  }
 
+  var enter = new IntersectionObserver(function (entries) {
+    reveal(entries.filter(function (e) { return e.isIntersecting; }).map(function (e) { return e.target; }));
+  }, { rootMargin: '0px 0px -10% 0px', threshold: 0.08 });
+  var leave = new IntersectionObserver(function (entries) {
+    entries.forEach(function (e) {
+      if (!e.isIntersecting && e.rootBounds && e.boundingClientRect.top >= e.rootBounds.bottom) rearm(e.target);
+    });
+  }, { threshold: 0 });
+
+  var all = [];
   variants.forEach(function (v) {
     document.querySelectorAll(v[0]).forEach(function (el) {
-      if (el.classList.contains('rv') || skip(el) || !below(el)) return;
-      if (v[1] === 'words' && !splitWords(el)) { el.setAttribute('data-rv', 'up'); }
+      if (el.classList.contains('rv') || skip(el)) return;
+      if (v[1] === 'words' && !splitWords(el)) el.setAttribute('data-rv', 'up');
       else el.setAttribute('data-rv', v[1]);
+      // already on screen at load: show it as-is, no flash
+      if (el.getBoundingClientRect().top < vh * 0.9) el.classList.add('in');
       el.classList.add('rv');
-      io.observe(el);
+      all.push(el);
     });
   });
-  document.querySelectorAll('.stats').forEach(function (s) { if (below(s)) io.observe(s); });
-  // alternate folder / cert tilt direction so they don't all lean the same way
+  document.querySelectorAll('.stats').forEach(function (s) { if (all.indexOf(s) < 0) all.push(s); });
+  all.forEach(function (el) { enter.observe(el); leave.observe(el); });
   document.querySelectorAll('[data-rv="tilt"]').forEach(function (el, i) { el.style.setProperty('--rv-r', (i % 2 ? 3 : -3) + 'deg'); });
 })();
