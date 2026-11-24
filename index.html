@@ -18,7 +18,7 @@
 <link rel="apple-touch-icon" href="assets/img/apple-touch-icon.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=Newsreader:ital,opsz,wght@0,6..72,300..500;1,6..72,300..500&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Anton&family=Italianno&family=Manrope:wght@400;500;600;700;800&family=Newsreader:ital,opsz,wght@0,6..72,300..500;1,6..72,300..500&display=swap">
 <link rel="stylesheet" href="assets/css/site.css">
 </head>
 <body>
@@ -41,12 +41,16 @@
 
   <section class="hero" aria-labelledby="hello">
     <div class="wrap">
+      <div class="bigname">
+        <h1 id="hello"><span>Matthew</span> <span>Sullivan</span></h1>
+        <span class="bn-script" aria-hidden="true">portfolio</span>
+        <div class="sticky-note" aria-hidden="true"><strong>Marketing @ UConn</strong><span>Based in Fairfield, CT</span></div>
+      </div>
       <figure class="portrait">
         <img src="assets/img/photos/matthew-quebec-square.jpg" alt="Matthew smiling in front of the lit-up Château Frontenac in Québec City at dusk" width="940" height="940">
       </figure>
       <div class="hero-intro">
         <p class="eyebrow">Marketing &middot; University of Connecticut &middot; <span style="white-space:nowrap">Class of 2028</span></p>
-        <h1 id="hello">Matthew Sullivan</h1>
         <p class="lede">I study marketing at UConn, with a concentration in Digital Marketing &amp; Analytics and a minor in Analytics, and I like making things: a twenty-second reel for a campus event, a pitch for a client, a club built from nothing. What I care about most is why people do what they do, and what gets them to show up.</p>
         <p class="seeking"><span class="seeking-dot" aria-hidden="true"></span><span><strong>Seeking Summer 2027 internships</strong><span class="seeking-fields">Marketing &middot; Content &middot; Sales &middot; Business</span></span></p>
         <div class="links">
@@ -115,25 +119,23 @@
           </dl>
           <p><a href="work.html#ksa">Read how these came together &rarr;</a></p>
         </div>
-        <div class="reels three">
-          <figure class="reel">
-            <video controls playsinline preload="none" poster="assets/img/ksa-scavenger-poster.jpg" aria-label="KSA Spooky Scavenger Hunt promo video">
-              <source src="assets/video/ksa-scavenger-hunt.mp4" type="video/mp4">
-            </video>
-            <figcaption><span>Spooky Scavenger Hunt</span><span class="date">0:19</span></figcaption>
-          </figure>
-          <figure class="reel">
-            <video controls playsinline preload="none" poster="assets/img/ksa-store-poster.jpg" aria-label="KSA Convenience Store pop-up promo video">
-              <source src="assets/video/ksa-convenience-store.mp4" type="video/mp4">
-            </video>
-            <figcaption><span>KSA Convenience Store</span><span class="date">0:23</span></figcaption>
-          </figure>
-          <figure class="reel">
-            <video controls playsinline preload="none" poster="assets/img/ksa-peperocky-poster.jpg" aria-label="Peperocky Night promo video for a KSA and Japanese Student Association event sponsored by Weee!">
-              <source src="assets/video/ksa-peperocky-night.mp4" type="video/mp4">
-            </video>
-            <figcaption><span>Peperocky Night</span><span class="date">0:19</span></figcaption>
-          </figure>
+        <div class="phone-stage">
+          <span class="bubble b1">Trend-based hooks</span>
+          <span class="bubble b2">CapCut edits</span>
+          <span class="bubble b3">All the video copy</span>
+          <span class="bubble b4">Real members, short skits</span>
+          <div class="phone">
+            <div class="phone-screen">
+              <video id="phone-video" controls playsinline preload="none" poster="assets/img/ksa-scavenger-poster.jpg" aria-label="KSA promo video: Spooky Scavenger Hunt">
+                <source src="assets/video/ksa-scavenger-hunt.mp4" type="video/mp4">
+              </video>
+            </div>
+          </div>
+          <div class="phone-tabs" role="group" aria-label="Choose a reel">
+            <button type="button" class="on" aria-pressed="true" data-src="assets/video/ksa-scavenger-hunt.mp4" data-poster="assets/img/ksa-scavenger-poster.jpg" data-label="Spooky Scavenger Hunt">Scavenger Hunt <span>0:19</span></button>
+            <button type="button" aria-pressed="false" data-src="assets/video/ksa-convenience-store.mp4" data-poster="assets/img/ksa-store-poster.jpg" data-label="KSA Convenience Store">Convenience Store <span>0:23</span></button>
+            <button type="button" aria-pressed="false" data-src="assets/video/ksa-peperocky-night.mp4" data-poster="assets/img/ksa-peperocky-poster.jpg" data-label="Peperocky Night">Peperocky Night <span>0:19</span></button>
+          </div>
         </div>
       </div>
     </div>
@@ -141,60 +143,109 @@
 
   <hr class="rule">
 
-  <section aria-labelledby="selected-h">
+  <section class="band-navy" aria-labelledby="selected-h">
     <div class="wrap">
       <div class="section-head">
         <p class="eyebrow">Selected work</p>
-        <h2 id="selected-h">Projects, clients, and competitions</h2>
+        <h2 id="selected-h">Open a folder</h2>
+        <p>Everything I&rsquo;ve worked on, sorted by what kind of work it was. Click a folder, or a project inside it, to dig in.</p>
       </div>
-      <ul class="plist">
-        <li><a href="work.html#srib">
-          <span class="date">Fall 2026</span>
-          <span class="t">Positioning a new master&rsquo;s program</span>
-          <span class="arrow" aria-hidden="true">&rarr;</span>
-          <span class="d">Benchmarked 9 graduate programs and proposed 4 career tracks for UConn&rsquo;s Social Responsibility &amp; Impact in Business master&rsquo;s.</span>
-        </a></li>
-        <li><a href="work.html#vdm">
-          <span class="date">Fall 2026</span>
-          <span class="t">Concert programs and ticketing at von der Mehden</span>
-          <span class="arrow" aria-hidden="true">&rarr;</span>
-          <span class="d">Five-plus printed concert programs, an AI-built tool that cut formatting from about an hour to under a minute, and a pitch to move ticket buyers online.</span>
-        </a></li>
-        <li><a href="work.html#brazil">
-          <span class="date">May 2026</span>
-          <span class="t">Brazil International Case Competition</span>
-          <span class="arrow" aria-hidden="true">&rarr;</span>
-          <span class="d">First of seven teams. An AI and communications plan for an ESG consulting client, built with students from other countries.</span>
-        </a></li>
-        <li><a href="work.html#ib-club">
-          <span class="date">2025&ndash;2026</span>
-          <span class="t">Starting the UConn Investment Banking Club</span>
-          <span class="arrow" aria-hidden="true">&rarr;</span>
-          <span class="d">Cofounded it at UConn&rsquo;s Stamford campus and ran its marketing as it grew to 200+ members.</span>
-        </a></li>
-        <li><a href="work.html#target">
-          <span class="date">Feb&ndash;Mar 2025</span>
-          <span class="t">Target Case Competition</span>
-          <span class="arrow" aria-hidden="true">&rarr;</span>
-          <span class="d">Led a team of four to first place out of five with a retail strategy for Target Home.</span>
-        </a></li>
+      <div class="folders">
+        <div class="folder">
+          <div class="folder-papers" aria-hidden="true"></div>
+          <div class="folder-body">
+            <h3><a class="folder-link" href="work.html#ksa">Social &amp; Content</a></h3>
+            <p class="folder-count">3 projects</p>
+            <ul><li><a href="work.html#ksa">Korean Student Association</a></li><li><a href="work.html#retreat-sweets">Retreat Sweets</a></li><li><a href="work.html#ct-digital-forum">CT Digital Forum</a></li></ul>
+          </div>
+        </div>
+        <div class="folder">
+          <div class="folder-papers" aria-hidden="true"></div>
+          <div class="folder-body">
+            <h3><a class="folder-link" href="work.html#srib">Strategy &amp; Consulting</a></h3>
+            <p class="folder-count">2 projects</p>
+            <ul><li><a href="work.html#srib">Master&rsquo;s program positioning</a></li><li><a href="work.html#storrs-wine">Storrs Wine &amp; Spirits</a></li></ul>
+          </div>
+        </div>
+        <div class="folder">
+          <div class="folder-papers" aria-hidden="true"></div>
+          <div class="folder-body">
+            <h3><a class="folder-link" href="work.html#brazil">Competitions</a></h3>
+            <p class="folder-count">3 projects</p>
+            <ul><li><a href="work.html#brazil">Brazil &middot; 1st of 7</a></li><li><a href="work.html#target">Target &middot; 1st of 5</a></li><li><a href="work.html#deca">DECA &middot; 2nd in CT</a></li></ul>
+          </div>
+        </div>
+        <div class="folder">
+          <div class="folder-papers" aria-hidden="true"></div>
+          <div class="folder-body">
+            <h3><a class="folder-link" href="work.html#ib-club">Design &amp; Build</a></h3>
+            <p class="folder-count">2 projects</p>
+            <ul><li><a href="work.html#ib-club">Investment Banking Club</a></li><li><a href="work.html#vdm">vdM Program Builder</a></li></ul>
+          </div>
+        </div>
+      </div>
+      <p class="band-link"><a href="work.html">See all work on one page &rarr;</a></p>
+    </div>
+  </section>
+
+  <section class="tools-sec" aria-labelledby="tools-h">
+    <div class="wrap">
+      <div class="section-head">
+        <p class="eyebrow">Tools &amp; certifications</p>
+        <h2 id="tools-h">What I work with</h2>
+      </div>
+      <ul class="tools" aria-label="Tools">
+        <li><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M12 0C5.373 0 0 5.373 0 12s5.373 12 12 12 12-5.373 12-12S18.627 0 12 0zM6.962 7.68c.754 0 1.337.549 1.405 1.2.069.583-.171 1.097-.822 1.406-.343.171-.48.172-.549.069-.034-.069 0-.137.069-.206.617-.514.617-.926.548-1.508-.034-.378-.308-.618-.583-.618-1.2 0-2.914 2.674-2.674 4.629.103.754.549 1.646 1.509 1.646.308 0 .65-.103.96-.24.5-.264.799-.47 1.097-.8-.073-.885.704-2.046 1.851-2.046.515 0 .926.205.96.583.068.514-.377.582-.514.582s-.378-.034-.378-.17c-.034-.138.309-.07.275-.378-.035-.206-.24-.274-.446-.274-.72 0-1.131.994-1.029 1.611.035.275.172.549.447.549.205 0 .514-.31.617-.755.068-.308.343-.514.583-.514.102 0 .17.034.205.171v.138c-.034.137-.137.548-.102.651 0 .069.034.171.17.171.092 0 .436-.18.777-.459.117-.59.253-1.298.253-1.357.034-.24.137-.48.617-.48.103 0 .171.034.205.171v.138l-.136.617c.445-.583 1.097-.994 1.508-.994.172 0 .309.102.309.274 0 .103 0 .274-.069.446-.137.377-.309.96-.412 1.474 0 .137.035.274.207.274.171 0 .685-.206 1.096-.754l.007-.004c-.002-.068-.007-.134-.007-.202 0-.411.035-.754.104-.994.068-.274.411-.514.617-.514.103 0 .205.069.205.171 0 .035 0 .103-.034.137-.137.446-.24.857-.24 1.269 0 .24.034.582.102.788 0 .034.035.069.07.069.068 0 .548-.445.89-1.028-.308-.206-.48-.549-.48-.96 0-.72.446-1.097.858-1.097.343 0 .617.24.617.72 0 .308-.103.65-.274.96h.102a.77.77 0 0 0 .584-.24.293.293 0 0 1 .134-.117c.335-.425.83-.74 1.41-.74.48 0 .924.205.959.582.068.515-.378.618-.515.618l-.002-.002c-.138 0-.377-.035-.377-.172 0-.137.309-.068.274-.376-.034-.206-.24-.275-.446-.275-.686 0-1.13.891-1.028 1.611.034.275.171.583.445.583.206 0 .515-.308.652-.754.068-.274.343-.514.583-.514.103 0 .17.034.205.171 0 .069 0 .206-.137.652-.17.308-.171.48-.137.617.034.274.171.48.309.583.034.034.068.102.068.102 0 .069-.034.138-.137.138-.034 0-.068 0-.103-.035-.514-.205-.72-.548-.789-.891-.205.24-.445.377-.72.377-.445 0-.89-.411-.96-.926a1.609 1.609 0 0 1 .075-.649c-.203.13-.422.203-.623.203h-.17c-.447.652-.927 1.098-1.27 1.303a.896.896 0 0 1-.377.104c-.068 0-.171-.035-.205-.104-.095-.152-.156-.392-.193-.667-.481.527-1.145.805-1.453.805-.343 0-.548-.206-.582-.55v-.376c.102-.754.377-1.2.377-1.337a.074.074 0 0 0-.069-.07c-.24 0-1.028.824-1.166 1.373l-.103.445c-.068.309-.377.515-.582.515-.103 0-.172-.035-.206-.172v-.137l.046-.233c-.435.31-.87.508-1.075.508-.308 0-.48-.172-.514-.412-.206.274-.445.412-.754.412-.352 0-.696-.24-.862-.593-.244.275-.523.553-.852.764-.48.309-1.028.549-1.68.549-.582 0-1.097-.309-1.371-.583-.412-.377-.651-.96-.686-1.509-.205-1.68.823-3.84 2.4-4.8.378-.205.755-.343 1.132-.343zm9.77 3.291c-.104 0-.172.172-.172.343 0 .274.137.583.309.755a1.74 1.74 0 0 0 .102-.583c0-.343-.137-.515-.24-.515z"/></svg>Canva</li>
+        <li><span class="tool-mono" aria-hidden="true">Cc</span>CapCut</li>
+        <li><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M17.621 0 5.977.004c-1.37 0-2.756.345-3.762 1.11a4.925 4.925 0 0 0-1.61 2.003C.233 3.93 0 5.02 0 5.951l.012 12.2c.002 1.604.479 3.057 1.461 4.112.984 1.056 2.462 1.683 4.331 1.691L16.856 24c1.26.005 3.095-.036 4.303-.714 1.075-.605 2.025-1.556 2.497-2.984.278-.84.345-2.084.344-3.147l-.021-11.13c-.002-.888-.15-2.023-.547-2.934-.425-.976-1.181-1.815-2.322-2.425C20.353.26 19.123 0 17.622 0zm0 .93c1.378 0 2.538.295 3.04.565.977.523 1.544 1.166 1.889 1.96.315.721.47 1.793.473 2.572l.018 11.13c.002 1.013-.097 2.257-.298 2.86-.396 1.202-1.146 1.946-2.063 2.462-.814.457-2.612.593-3.82.588l-11.05-.044c-1.657-.007-2.832-.534-3.626-1.386-.792-.851-1.212-2.06-1.212-3.485L.999 5.95c0-.829.196-1.827.474-2.437.345-.757.75-1.207 1.365-1.674C3.585 1.27 4.868.97 6.08.97zm-5.66 3.423c-1.976.089-3.204 1.658-3.214 3.29.019 1.443 1.635 3.481 2.884 4.53.12.099.154.109.33.18.062.025.198-.047.327-.135.36-.245.993-.947 1.648-1.738a7.67 7.67 0 0 0 1.031-1.683c.409-.89.261-1.599.235-1.888a3.983 3.983 0 0 0-.99-1.692 3.36 3.36 0 0 0-2.251-.864zm4.172 7.922a10.185 10.185 0 0 0-3.244.61c-.15.058-.26.1-.374.17-.057.036-.11.135-.105.292.017.433.29 1.278.624 2.27.384 1.135 1.066 2.27 1.844 2.74a3.23 3.23 0 0 0 2.53.342c.832-.243 1.595-.868 1.962-1.546.986-1.818.19-3.548-1.121-4.417-.447-.296-1.133-.445-1.89-.46-.074 0-.15-.002-.226-.001zm-8.432.038a6.201 6.201 0 0 0-.752.047c-.596.078-.932.273-1.29.51a3.177 3.177 0 0 0-1.365 1.979c-.075.552-.086 1.053.033 1.507.433 1.389 1.326 2.222 2.847 2.452.636.028 1.37-.063 1.99-.45 1.269-.782 2.08-3.17 2.412-4.742.053-.176.035-.357-.013-.42-.005-.067-.044-.113-.19-.183-.398-.192-1.32-.417-2.375-.6a7.68 7.68 0 0 0-1.297-.1z"/></svg>DaVinci Resolve</li>
+        <li><span class="tool-mono" aria-hidden="true">X</span>Excel</li>
+        <li><span class="tool-mono" aria-hidden="true">P</span>PowerPoint</li>
+        <li><span class="tool-mono" aria-hidden="true">W</span>Word</li>
+        <li><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M12.48 10.92v3.28h7.84c-.24 1.84-.853 3.187-1.787 4.133-1.147 1.147-2.933 2.4-6.053 2.4-4.827 0-8.6-3.893-8.6-8.72s3.773-8.72 8.6-8.72c2.6 0 4.507 1.027 5.907 2.347l2.307-2.307C18.747 1.44 16.133 0 12.48 0 5.867 0 .307 5.387.307 12s5.56 12 12.173 12c3.573 0 6.267-1.173 8.373-3.36 2.16-2.16 2.84-5.213 2.84-7.667 0-.76-.053-1.467-.173-2.053H12.48z"/></svg>Google Workspace</li>
+        <li><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M6.915 4.03c-1.968 0-3.683 1.28-4.871 3.113C.704 9.208 0 11.883 0 14.449c0 .706.07 1.369.21 1.973a6.624 6.624 0 0 0 .265.86 5.297 5.297 0 0 0 .371.761c.696 1.159 1.818 1.927 3.593 1.927 1.497 0 2.633-.671 3.965-2.444.76-1.012 1.144-1.626 2.663-4.32l.756-1.339.186-.325c.061.1.121.196.183.3l2.152 3.595c.724 1.21 1.665 2.556 2.47 3.314 1.046.987 1.992 1.22 3.06 1.22 1.075 0 1.876-.355 2.455-.843a3.743 3.743 0 0 0 .81-.973c.542-.939.861-2.127.861-3.745 0-2.72-.681-5.357-2.084-7.45-1.282-1.912-2.957-2.93-4.716-2.93-1.047 0-2.088.467-3.053 1.308-.652.57-1.257 1.29-1.82 2.05-.69-.875-1.335-1.547-1.958-2.056-1.182-.966-2.315-1.303-3.454-1.303zm10.16 2.053c1.147 0 2.188.758 2.992 1.999 1.132 1.748 1.647 4.195 1.647 6.4 0 1.548-.368 2.9-1.839 2.9-.58 0-1.027-.23-1.664-1.004-.496-.601-1.343-1.878-2.832-4.358l-.617-1.028a44.908 44.908 0 0 0-1.255-1.98c.07-.109.141-.224.211-.327 1.12-1.667 2.118-2.602 3.358-2.602zm-10.201.553c1.265 0 2.058.791 2.675 1.446.307.327.737.871 1.234 1.579l-1.02 1.566c-.757 1.163-1.882 3.017-2.837 4.338-1.191 1.649-1.81 1.817-2.486 1.817-.524 0-1.038-.237-1.383-.794-.263-.426-.464-1.13-.464-2.046 0-2.221.63-4.535 1.66-6.088.454-.687.964-1.226 1.533-1.533a2.264 2.264 0 0 1 1.088-.285z"/></svg>Meta Ads</li>
+        <li><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M1.5 0h21l-1.91 21.563L11.977 24l-8.564-2.438L1.5 0zm7.031 9.75l-.232-2.718 10.059.003.23-2.622L5.412 4.41l.698 8.01h9.126l-.326 3.426-2.91.804-2.955-.81-.188-2.11H6.248l.33 4.171L12 19.351l5.379-1.443.744-8.157H8.531z"/></svg>HTML</li>
+        <li><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M14.25.18l.9.2.73.26.59.3.45.32.34.34.25.34.16.33.1.3.04.26.02.2-.01.13V8.5l-.05.63-.13.55-.21.46-.26.38-.3.31-.33.25-.35.19-.35.14-.33.1-.3.07-.26.04-.21.02H8.77l-.69.05-.59.14-.5.22-.41.27-.33.32-.27.35-.2.36-.15.37-.1.35-.07.32-.04.27-.02.21v3.06H3.17l-.21-.03-.28-.07-.32-.12-.35-.18-.36-.26-.36-.36-.35-.46-.32-.59-.28-.73-.21-.88-.14-1.05-.05-1.23.06-1.22.16-1.04.24-.87.32-.71.36-.57.4-.44.42-.33.42-.24.4-.16.36-.1.32-.05.24-.01h.16l.06.01h8.16v-.83H6.18l-.01-2.75-.02-.37.05-.34.11-.31.17-.28.25-.26.31-.23.38-.2.44-.18.51-.15.58-.12.64-.1.71-.06.77-.04.84-.02 1.27.05zm-6.3 1.98l-.23.33-.08.41.08.41.23.34.33.22.41.09.41-.09.33-.22.23-.34.08-.41-.08-.41-.23-.33-.33-.22-.41-.09-.41.09zm13.09 3.95l.28.06.32.12.35.18.36.27.36.35.35.47.32.59.28.73.21.88.14 1.04.05 1.23-.06 1.23-.16 1.04-.24.86-.32.71-.36.57-.4.45-.42.33-.42.24-.4.16-.36.09-.32.05-.24.02-.16-.01h-8.22v.82h5.84l.01 2.76.02.36-.05.34-.11.31-.17.29-.25.25-.31.24-.38.2-.44.17-.51.15-.58.13-.64.09-.71.07-.77.04-.84.01-1.27-.04-1.07-.14-.9-.2-.73-.25-.59-.3-.45-.33-.34-.34-.25-.34-.16-.33-.1-.3-.04-.25-.02-.2.01-.13v-5.34l.05-.64.13-.54.21-.46.26-.38.3-.32.33-.24.35-.2.35-.14.33-.1.3-.06.26-.04.21-.02.13-.01h5.84l.69-.05.59-.14.5-.21.41-.28.33-.32.27-.35.2-.36.15-.36.1-.35.07-.32.04-.28.02-.21V6.07h2.09l.14.01zm-6.47 14.25l-.23.33-.08.41.08.41.23.33.33.23.41.08.41-.08.33-.23.23-.33.08-.41-.08-.41-.23-.33-.33-.23-.41-.08-.41.08z"/></svg>Python</li>
+        <li><span class="tool-mono tool-mono-sm" aria-hidden="true">SQL</span>SQL</li>
+        <li><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M22.2819 9.8211a5.9847 5.9847 0 0 0-.5157-4.9108 6.0462 6.0462 0 0 0-6.5098-2.9A6.0651 6.0651 0 0 0 4.9807 4.1818a5.9847 5.9847 0 0 0-3.9977 2.9 6.0462 6.0462 0 0 0 .7427 7.0966 5.98 5.98 0 0 0 .511 4.9107 6.051 6.051 0 0 0 6.5146 2.9001A5.9847 5.9847 0 0 0 13.2599 24a6.0557 6.0557 0 0 0 5.7718-4.2058 5.9894 5.9894 0 0 0 3.9977-2.9001 6.0557 6.0557 0 0 0-.7475-7.0729zm-9.022 12.6081a4.4755 4.4755 0 0 1-2.8764-1.0408l.1419-.0804 4.7783-2.7582a.7948.7948 0 0 0 .3927-.6813v-6.7369l2.02 1.1686a.071.071 0 0 1 .038.052v5.5826a4.504 4.504 0 0 1-4.4945 4.4944zm-9.6607-4.1254a4.4708 4.4708 0 0 1-.5346-3.0137l.142.0852 4.783 2.7582a.7712.7712 0 0 0 .7806 0l5.8428-3.3685v2.3324a.0804.0804 0 0 1-.0332.0615L9.74 19.9502a4.4992 4.4992 0 0 1-6.1408-1.6464zM2.3408 7.8956a4.485 4.485 0 0 1 2.3655-1.9728V11.6a.7664.7664 0 0 0 .3879.6765l5.8144 3.3543-2.0201 1.1685a.0757.0757 0 0 1-.071 0l-4.8303-2.7865A4.504 4.504 0 0 1 2.3408 7.872zm16.5963 3.8558L13.1038 8.364 15.1192 7.2a.0757.0757 0 0 1 .071 0l4.8303 2.7913a4.4944 4.4944 0 0 1-.6765 8.1042v-5.6772a.79.79 0 0 0-.407-.667zm2.0107-3.0231l-.142-.0852-4.7735-2.7818a.7759.7759 0 0 0-.7854 0L9.409 9.2297V6.8974a.0662.0662 0 0 1 .0284-.0615l4.8303-2.7866a4.4992 4.4992 0 0 1 6.6802 4.66zM8.3065 12.863l-2.02-1.1638a.0804.0804 0 0 1-.038-.0567V6.0742a4.4992 4.4992 0 0 1 7.3757-3.4537l-.142.0805L8.704 5.459a.7948.7948 0 0 0-.3927.6813zm1.0976-2.3654l2.602-1.4998 2.6069 1.4998v2.9994l-2.5974 1.4997-2.6067-1.4997Z"/></svg>Codex</li>
       </ul>
-      <p style="margin-top:22px"><a href="work.html">All work &rarr;</a></p>
+      <ul class="certs" aria-label="Certifications">
+        <li><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M3.9998 22.9291C1.7908 22.9291 0 21.1383 0 18.9293s1.7908-3.9998 3.9998-3.9998 3.9998 1.7908 3.9998 3.9998-1.7908 3.9998-3.9998 3.9998zm19.4643-6.0004L15.4632 3.072C14.3586 1.1587 11.9121.5028 9.9988 1.6074S7.4295 5.1585 8.5341 7.0718l8.0009 13.8567c1.1046 1.9133 3.5511 2.5679 5.4644 1.4646 1.9134-1.1046 2.568-3.5511 1.4647-5.4644zM7.5137 4.8438L1.5645 15.1484A4.5 4.5 0 0 1 4 14.4297c2.5597-.0075 4.6248 2.1585 4.4941 4.7148l3.2168-5.5723-3.6094-6.25c-.4499-.7793-.6322-1.6394-.5878-2.4784z"/></svg><span><small>Google</small>Google Ads Search Certification</span></li>
+        <li><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M18.164 7.93V5.084a2.198 2.198 0 001.267-1.978v-.067A2.2 2.2 0 0017.238.845h-.067a2.2 2.2 0 00-2.193 2.193v.067a2.196 2.196 0 001.252 1.973l.013.006v2.852a6.22 6.22 0 00-2.969 1.31l.012-.01-7.828-6.095A2.497 2.497 0 104.3 4.656l-.012.006 7.697 5.991a6.176 6.176 0 00-1.038 3.446c0 1.343.425 2.588 1.147 3.607l-.013-.02-2.342 2.343a1.968 1.968 0 00-.58-.095h-.002a2.033 2.033 0 102.033 2.033 1.978 1.978 0 00-.1-.595l.005.014 2.317-2.317a6.247 6.247 0 104.782-11.134l-.036-.005zm-.964 9.378a3.206 3.206 0 113.215-3.207v.002a3.206 3.206 0 01-3.207 3.207z"/></svg><span><small>HubSpot Academy</small>Digital Marketing Certification</span></li>
+        <li><span class="tool-mono" aria-hidden="true">B</span><span><small>Bloomberg</small>Bloomberg Market Concepts</span></li>
+      </ul>
     </div>
   </section>
 
   <section class="lens" aria-labelledby="lens-h">
-    <div class="wrap">
-      <div class="section-head">
+    <div class="wrap lens-wrap">
+      <div class="camera" aria-roledescription="slideshow" aria-label="My photography">
+        <div class="cam-top" aria-hidden="true"><span class="cam-dial"></span><span class="cam-shutter"></span></div>
+        <div class="cam-body">
+          <a class="cam-screen" href="photography.html" aria-label="Open the photography gallery">
+                <img src="assets/img/photos/quebec-bistro-night.jpg" alt="Café umbrellas and string lights outside Bistro 1640 at night in Old Québec" data-set="Québec City" class="on" loading="lazy">
+                <img src="assets/img/photos/concert-conductor.jpg" alt="A conductor leading a student orchestra on a warm wood-paneled stage" data-set="Concerts" loading="lazy">
+                <img src="assets/img/photos/quebec-place-royale.jpg" alt="Stone buildings and the steeple of Notre-Dame-des-Victoires around Place Royale at dusk" data-set="Québec City" loading="lazy">
+                <img src="assets/img/photos/concert-soloist.jpg" alt="A violin soloist in a dark sequined dress playing in front of the orchestra" data-set="Concerts" loading="lazy">
+                <img src="assets/img/photos/ctdf-room.jpg" alt="A cybercrime panel on stage at CT Digital Forum with the audience in the foreground" data-set="CT Digital Forum" loading="lazy">
+                <img src="assets/img/photos/quebec-sous-le-fort.jpg" alt="Red patio umbrellas above a busy lantern-lit street in Québec City at dusk" data-set="Québec City" loading="lazy">
+                <img src="assets/img/photos/concert-hall.jpg" alt="A full orchestra on a lit stage seen from the dark audience" data-set="Concerts" loading="lazy">
+            <span class="cam-hud" aria-hidden="true"><span class="cam-rec"></span><span id="cam-set">Québec City</span><span id="cam-count">1/7</span></span>
+          </a>
+          <div class="cam-controls">
+            <span class="cam-label" aria-hidden="true">MENU</span>
+            <button type="button" class="cam-btn" id="cam-prev" aria-label="Previous photo">&lsaquo;</button>
+            <button type="button" class="cam-ring" id="cam-play" aria-label="Pause slideshow"></button>
+            <button type="button" class="cam-btn" id="cam-next" aria-label="Next photo">&rsaquo;</button>
+            <span class="cam-label" aria-hidden="true">DISP</span>
+          </div>
+        </div>
+      </div>
+      <div class="lens-copy">
         <p class="eyebrow">Photography &middot; Travel, concerts, events</p>
         <h2 id="lens-h">Through my lens</h2>
+        <p>Trips, concerts, and the events I cover, mostly shot on my Canon EOS R50. Tap the screen to open the full gallery.</p>
+        <p><a href="photography.html">See all photos &rarr;</a></p>
       </div>
-      <div class="lens-row">
-        <a class="lens-shot" style="--r:0.667" href="photography.html#quebec"><img src="assets/img/photos/quebec-bistro-night.jpg" alt="Café umbrellas and string lights outside Bistro 1640 at night in Old Québec" width="1200" height="1800" loading="lazy"></a>
-        <a class="lens-shot wide" style="--r:1.5" href="photography.html#concerts"><img src="assets/img/photos/concert-conductor.jpg" alt="A conductor leading a student orchestra on a warm wood-paneled stage" width="1800" height="1200" loading="lazy"></a>
-        <a class="lens-shot" style="--r:1.333" href="photography.html#ct-digital-forum"><img src="assets/img/photos/ctdf-room.jpg" alt="A cybercrime panel on stage at CT Digital Forum with the audience in the foreground" width="1024" height="768" loading="lazy"></a>
-      </div>
-      <p style="margin-top:22px"><a href="photography.html">See all photos &rarr;</a></p>
     </div>
   </section>
 

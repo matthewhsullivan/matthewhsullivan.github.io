@@ -84,3 +84,57 @@
     if (e.key === 'ArrowRight') show(i + 1);
   });
 })();
+
+// Homepage phone: switch between the KSA reels.
+(function () {
+  var v = document.getElementById('phone-video');
+  if (!v) return;
+  var tabs = Array.prototype.slice.call(document.querySelectorAll('.phone-tabs button'));
+  tabs.forEach(function (b) {
+    b.addEventListener('click', function () {
+      if (b.classList.contains('on')) return;
+      tabs.forEach(function (t) { t.classList.remove('on'); t.setAttribute('aria-pressed', 'false'); });
+      b.classList.add('on'); b.setAttribute('aria-pressed', 'true');
+      v.pause();
+      v.setAttribute('poster', b.getAttribute('data-poster'));
+      v.querySelector('source').setAttribute('src', b.getAttribute('data-src'));
+      v.setAttribute('aria-label', 'KSA promo video: ' + b.getAttribute('data-label'));
+      v.load();
+    });
+  });
+})();
+
+// Homepage camera: photo slideshow on the screen.
+(function () {
+  var screen = document.querySelector('.cam-screen');
+  if (!screen) return;
+  var imgs = Array.prototype.slice.call(screen.querySelectorAll('img'));
+  var setEl = document.getElementById('cam-set'), countEl = document.getElementById('cam-count');
+  var playBtn = document.getElementById('cam-play');
+  var i = 0, timer = null, visible = true;
+  var reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var playing = !reduce;
+  function show(n) {
+    imgs[i].classList.remove('on');
+    i = (n + imgs.length) % imgs.length;
+    var img = imgs[i];
+    img.loading = 'eager';
+    img.classList.add('on');
+    imgs[(i + 1) % imgs.length].loading = 'eager';   // warm up the next one
+    setEl.textContent = img.getAttribute('data-set');
+    countEl.textContent = (i + 1) + '/' + imgs.length;
+  }
+  function tick() { show(i + 1); }
+  function sync() {
+    clearInterval(timer); timer = null;
+    if (playing && visible) timer = setInterval(tick, 3500);
+    playBtn.setAttribute('aria-label', playing ? 'Pause slideshow' : 'Play slideshow');
+  }
+  document.getElementById('cam-prev').addEventListener('click', function () { show(i - 1); sync(); });
+  document.getElementById('cam-next').addEventListener('click', function () { show(i + 1); sync(); });
+  playBtn.addEventListener('click', function () { playing = !playing; sync(); });
+  if ('IntersectionObserver' in window) {
+    new IntersectionObserver(function (e) { visible = e[0].isIntersecting; sync(); }).observe(screen);
+  }
+  sync();
+})();
