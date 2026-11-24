@@ -681,3 +681,48 @@ html { -webkit-tap-highlight-color: rgba(31, 59, 99, .12); }
     radial-gradient(120% 90% at 92% -10%, rgba(120, 150, 200, .16), transparent 55%),
     radial-gradient(90% 80% at -10% 110%, rgba(0, 0, 0, .35), transparent 60%);
 }
+
+/* ---------- manila folders with torn halftone sheets ---------- */
+:root { --fold-a: #F3E9A9; --fold-b: #E7D886; --fold-ink: #3A2B1E; --fold-soft: #6E5C3A; --fold-link: #26406B; }
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) { --fold-a: #DCCE88; --fold-b: #CDBC6F; } }
+:root[data-theme="dark"] { --fold-a: #DCCE88; --fold-b: #CDBC6F; }
+.folders { padding-top: 34px; }
+.folder { padding-top: 46px; }
+.folder-papers { left: 5%; right: -3%; top: 0; height: 130px; background: none; box-shadow: none; border-radius: 0;
+  transform: rotate(-1.5deg); transform-origin: 30% 100%; transition: transform .5s cubic-bezier(.2,.8,.2,1); }
+.folder-papers span { position: absolute; display: block; }
+/* back sheet: pale, printed-looking */
+.folder-papers span:first-child { left: 8%; right: 20%; top: 0; bottom: 0; transform: rotate(2deg);
+  background: radial-gradient(rgba(70, 90, 130, .28) 1px, transparent 1.3px) 0 0 / 4px 4px, #E9EEF6; clip-path: polygon(0% 4px, 4% 6px, 7% 5px, 11% 1px, 16% 1px, 21% 2px, 24% 4px, 31% 2px, 35% 6px, 41% 6px, 46% 9px, 49% 8px, 53% 2px, 57% 3px, 63% 2px, 68% 6px, 73% 5px, 76% 1px, 80% 6px, 85% 4px, 90% 5px, 94% 7px, 100% 3px, 100% 100%, 0 100%); }
+/* front sheet: blue, darker in each folder */
+.folder-papers span:last-child { left: 0; right: 0; top: 26px; bottom: 0;
+  background: radial-gradient(rgba(255, 255, 255, .35) 1px, transparent 1.4px) 0 0 / 4px 4px,
+    linear-gradient(180deg, rgba(255,255,255,.18), rgba(0,0,0,.08)), var(--sheet-c, #8FB0E8); clip-path: polygon(0% 6px, 5% 8px, 11% 3px, 18% 2px, 23% 7px, 26% 5px, 29% 6px, 35% 6px, 42% 4px, 48% 6px, 53% 5px, 59% 9px, 64% 6px, 68% 7px, 73% 9px, 79% 3px, 84% 6px, 87% 5px, 91% 2px, 94% 7px, 97% 3px, 100% 8px, 100% 100%, 0 100%); }
+.folder:nth-child(1) { --sheet-c: #A9C3EE; }
+.folder:nth-child(2) { --sheet-c: #6F98E0; }
+.folder:nth-child(3) { --sheet-c: #3F6DC2; }
+.folder:nth-child(4) { --sheet-c: #1F2F7E; }
+.folder:nth-child(4) .folder-papers span:first-child { background: radial-gradient(rgba(30, 40, 90, .55) 1px, transparent 1.4px) 0 0 / 4px 4px, #C9CFDD; }
+/* the folder front */
+.folder-body { background: linear-gradient(180deg, var(--fold-a), var(--fold-b)); color: var(--fold-ink); isolation: isolate;
+  border-radius: 6px 18px 18px 18px; padding: 26px 22px 22px; min-height: 220px;
+  box-shadow: inset 0 1px 0 rgba(255,255,255,.55), 0 22px 34px -20px rgba(0, 0, 0, .6); }
+.folder-body::before { top: -24px; left: 0; width: 48%; height: 26px; border-radius: 0; background: var(--fold-a);
+  -webkit-mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 200 26' preserveAspectRatio='none'%3E%3Cpath d='M0 26V12Q0 0 12 0H118Q130 0 139 8L152 20Q158 26 170 26Z'/%3E%3C/svg%3E") 0 0 / 100% 100% no-repeat;
+          mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 200 26' preserveAspectRatio='none'%3E%3Cpath d='M0 26V12Q0 0 12 0H118Q130 0 139 8L152 20Q158 26 170 26Z'/%3E%3C/svg%3E") 0 0 / 100% 100% no-repeat; }
+/* soft inner panel, like a pressed edge on real card stock */
+.folder-body::after { content: ""; position: absolute; inset: 12px 9px 9px; border-radius: 13px; z-index: -1; pointer-events: none;
+  background: linear-gradient(180deg, rgba(255,255,255,.22), rgba(255,255,255,.06)); box-shadow: inset 0 0 0 1px rgba(150, 125, 40, .16), 0 1px 0 rgba(255,255,255,.35); }
+.folder h3 { color: var(--fold-ink); font-size: 1.6rem; }
+.folder-count { color: var(--fold-soft); }
+.folder li a { color: var(--fold-link); }
+@media (hover: hover) {
+  .folder:hover .folder-papers { transform: rotate(-3deg) translateY(-18px); }
+  .folder:hover .folder-papers span:first-child { transform: rotate(5deg) translate(6px, -6px); }
+  .folder:hover h3 { color: var(--fold-link); }
+}
+.folder:focus-within .folder-papers { transform: rotate(-3deg) translateY(-18px); }
+.folder-papers span:first-child { transition: transform .5s cubic-bezier(.2,.8,.2,1); }
+.folder { padding-top: 66px; }
+.folder-papers { height: 150px; }
+.folder-papers span:last-child { top: 22px; }
