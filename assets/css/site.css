@@ -776,8 +776,7 @@ html { -webkit-tap-highlight-color: rgba(31, 59, 99, .12); }
   background: #050A19; background-image: none;
 }
 .hero-bg { position: absolute; inset: 0; z-index: -1; pointer-events: none; }
-.hero-bg-img, .hero-bg-shine { position: absolute; inset: -6%; background: url("../img/hero-waves.webp") center 62% / cover no-repeat; }
-@media (max-width: 720px) { .hero-bg-img, .hero-bg-shine { background-image: url("../img/hero-waves-sm.webp"); background-position: 30% 70%; } }
+.hero-bg-img, .hero-bg-shine { position: absolute; inset: -6%; }
 .hero-bg-img { animation: waves-drift 38s ease-in-out infinite alternate; }
 /* a band of light that travels along the gold lines */
 .hero-bg-shine { filter: brightness(2.1) saturate(1.35); mix-blend-mode: screen; opacity: .75;
@@ -818,3 +817,14 @@ html { -webkit-tap-highlight-color: rgba(31, 59, 99, .12); }
     radial-gradient(70% 60% at 85% 45%, rgba(140, 175, 225, .16), transparent 65%),
     radial-gradient(70% 80% at 105% 110%, rgba(4, 10, 24, .5), transparent 60%);
 }
+
+/* hero background v2: crisp vector lines, no cursor glow or light sweep, very slow drift only */
+.hero-bg-img { background: #050A19 url("../img/hero-waves.svg") center bottom / cover no-repeat; inset: -3%;
+  animation: waves-drift-soft 60s ease-in-out infinite alternate; }
+@media (max-width: 720px) { .hero-bg-img { background-image: url("../img/hero-waves.svg"); background-position: 22% bottom; } }
+.hero-bg-shine { display: none; }
+.hero-bg-glow { background:
+    linear-gradient(180deg, rgba(5, 10, 25, .3), transparent 22%, transparent 80%, var(--hero-after) 100%),
+    radial-gradient(120% 90% at 50% 40%, transparent 60%, rgba(2, 5, 14, .45)); }
+@keyframes waves-drift-soft { from { transform: scale(1) translate(0, 0); } to { transform: scale(1.035) translate(-1%, .6%); } }
+@media (prefers-reduced-motion: reduce) { .hero-bg-img { animation: none; } }
