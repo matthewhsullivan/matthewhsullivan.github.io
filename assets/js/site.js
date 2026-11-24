@@ -189,6 +189,7 @@
     dt.setAttribute('data-raw', raw);
     var m = raw.match(/^([^\d]*)([\d,]+)(.*)$/);
     if (!m) return;
+    if (parseInt(m[2].replace(/,/g, ''), 10) < 10) return;   // "1 hour" etc. read oddly counting from 0
     var target = parseInt(m[2].replace(/,/g, ''), 10), comma = m[2].indexOf(',') > -1, t0 = null, dur = 1500;
     var run = (dt._run || 0) + 1; dt._run = run;
     dt.style.minWidth = dt.offsetWidth + 'px';

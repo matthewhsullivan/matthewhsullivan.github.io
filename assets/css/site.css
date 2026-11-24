@@ -641,3 +641,7 @@ html { -webkit-tap-highlight-color: rgba(31, 59, 99, .12); }
   .featured-sec .feature-copy { grid-area: copy; align-self: start; }
   .featured-sec .phone-stage { grid-area: phone; align-self: center; }
 }
+.app-shots .shot { border-radius: 10px; box-shadow: 0 0 0 1px var(--rule), 0 18px 34px -22px rgba(10, 18, 32, .55); }
+@media (min-width: 561px) { .case .stats.stats-wide-first:has(> div) { grid-template-columns: minmax(0, 2.2fr) minmax(0, 1fr); max-width: 680px; } }
+.stats-wide-first dt { white-space: nowrap; font-size: clamp(1.75rem, 6.2cqi, 2.7rem); }
+@media (max-width: 560px) { .stats.stats-wide-first { grid-template-columns: minmax(0, 1fr); } .stats-wide-first dt { white-space: normal; } }
