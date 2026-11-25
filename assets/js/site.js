@@ -156,7 +156,9 @@
     ['.phone-stage .phone', 'rise-big'],
     ['.phone-stage .bubble', 'pop'],
     ['.phone-tabs', 'up'],
-    ['.tools > li', 'pop'],
+    ['.tools-carousel', 'up'],
+    ['.certs-h', 'up'],
+    ['.cert-shots > .cert', 'tilt'],
     ['.touch-h, .touch-mail', 'up'],
     ['.touch-icons > li', 'pop'],
     ['.lens-wrap .camera', 'from-left'],
@@ -253,4 +255,64 @@
   document.querySelectorAll('.stats').forEach(function (s) { if (all.indexOf(s) < 0) all.push(s); });
   all.forEach(function (el) { enter.observe(el); leave.observe(el); });
   document.querySelectorAll('[data-rv="tilt"]').forEach(function (el, i) { el.style.setProperty('--rv-r', (i % 2 ? 3 : -3) + 'deg'); });
+})();
+
+/* Tools turntable: icons float on a slowly turning ring. Drag (mouse or touch)
+   or use the arrow keys to spin it; it eases back to its slow spin on release.
+   Pauses when off screen. Reduced motion: no auto-spin, still draggable. */
+(function () {
+  var box = document.querySelector('.tools-carousel');
+  if (!box) return;
+  var items = Array.prototype.slice.call(box.querySelectorAll('.tools > li'));
+  var n = items.length, step = Math.PI * 2 / n;
+  var reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var auto = reduce ? 0 : 0.0019;              // radians per frame (~one turn per 55s)
+  var angle = 0, vel = auto, dragging = false, lastX = 0, lastT = 0, visible = true, raf = 0, t = 0;
+  box.classList.add('is-3d');
+
+  function layout() {
+    var w = box.clientWidth, small = w < 600,
+        rx = small ? w * 0.62 : Math.min(w * 0.43, 480), lift = small ? 58 : Math.min(120, Math.max(70, w * 0.085));
+    t += 1;
+    for (var i = 0; i < n; i++) {
+      var a = angle + i * step, s = Math.sin(a), c = Math.cos(a);   // c = 1 is front and center
+      var depth = (c + 1) / 2;                                         // 0 back .. 1 front
+      var bob = reduce ? 0 : Math.sin(t / 70 + i * 1.7) * 6;
+      var x = s * rx, y = -(1 - depth) * lift * 1.15 + bob;   // back of the ring sits higher, like a turntable seen from above
+      var sc = 0.56 + 0.44 * depth;
+      var el = items[i];
+      el.style.transform = 'translate3d(' + x.toFixed(1) + 'px,' + y.toFixed(1) + 'px,0) scale(' + sc.toFixed(3) + ')';
+      el.style.setProperty('--fade', (0.62 * Math.pow(1 - depth, 1.2)).toFixed(3));   // cards stay solid; the back ones are washed out
+      el.style.zIndex = String(Math.round(depth * 100));
+      el.classList.toggle('is-front', depth > 0.97);
+    }
+  }
+  function frame() {
+    raf = 0;
+    if (!dragging) { vel += (auto - vel) * 0.03; angle += vel; }
+    layout();
+    if (visible && (!reduce || dragging || Math.abs(vel) > 0.00005)) raf = requestAnimationFrame(frame);
+  }
+  function kick() { if (!raf && visible) raf = requestAnimationFrame(frame); }
+
+  box.addEventListener('pointerdown', function (e) {
+    dragging = true; lastX = e.clientX; lastT = performance.now(); vel = 0;
+    box.setPointerCapture(e.pointerId); box.classList.add('dragging'); kick();
+  });
+  box.addEventListener('pointermove', function (e) {
+    if (!dragging) return;
+    var now = performance.now(), dx = e.clientX - lastX, k = 1 / Math.max(260, box.clientWidth * 0.42);
+    angle += dx * k; vel = dx * k / Math.max(1, (now - lastT) / 16.7);
+    lastX = e.clientX; lastT = now;
+  });
+  function end() { if (!dragging) return; dragging = false; box.classList.remove('dragging'); kick(); }
+  box.addEventListener('pointerup', end); box.addEventListener('pointercancel', end); box.addEventListener('lostpointercapture', end);
+  box.addEventListener('keydown', function (e) {
+    if (e.key === 'ArrowLeft' || e.key === 'ArrowRight') { e.preventDefault(); vel += (e.key === 'ArrowLeft' ? -1 : 1) * 0.045; kick(); }
+  });
+  if ('IntersectionObserver' in window) {
+    new IntersectionObserver(function (en) { visible = en[0].isIntersecting; kick(); }).observe(box);
+  }
+  window.addEventListener('resize', layout);
+  layout(); kick();
 })();
