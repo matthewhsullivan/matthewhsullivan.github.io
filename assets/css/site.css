@@ -883,3 +883,13 @@ h1, h2, h3, .section-head h2 { letter-spacing: -.015em; }
   .tools-carousel.is-3d .tools li { width: 100px; margin: -58px 0 0 -50px; padding: 16px 6px 12px; font-size: .8rem; gap: 8px; }
   .tools-carousel.is-3d .tools li svg { width: 36px; height: 36px; }
 }
+
+/* Target deck: a swipeable strip of slides */
+.deck-strip { display: flex !important; gap: 16px; overflow-x: auto; scroll-snap-type: x mandatory; padding: 4px 2px 14px; margin-top: -6px;
+  scrollbar-width: thin; -webkit-overflow-scrolling: touch; }
+.deck-strip figure { flex: 0 0 clamp(240px, 34%, 360px); scroll-snap-align: start; margin: 0; }
+.deck-strip .shot { border-radius: 10px; overflow: hidden; box-shadow: 0 0 0 1px var(--rule), 0 14px 26px -18px rgba(10, 20, 40, .5); }
+.deck-strip img { display: block; width: 100%; height: auto; aspect-ratio: 16 / 9; object-fit: cover; }
+.deck-strip figcaption { font-size: .82rem; color: var(--ink-soft); margin-top: 8px; }
+.deck-note { color: var(--ink-soft); }
+.case-body p + p { margin-top: .75em; }

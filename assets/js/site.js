@@ -164,7 +164,8 @@
     ['.lens-wrap .camera', 'from-left'],
     ['.lens-copy > :not(h2)', 'from-right'],
     ['.about-teaser .prose > :not(h2), .contact .prose > :not(h2)', 'up'],
-    ['.about-teaser .photo-card, .case-photos > *, .g-row > *, .reels', 'window'],
+    ['.about-teaser .photo-card, .case-photos:not(.deck-strip) > *, .g-row > *, .reels', 'window'],
+    ['.deck-strip', 'up'],
     ['.case-body > *, .about-grid > *', 'up']
   ];
 
