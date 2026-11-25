@@ -1,0 +1,1056 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Adding AI to Client Engagement · Brazil case competition deck · Matthew Sullivan</title>
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Figtree:wght@300;400;500;600;700;800;900&family=Space+Mono:wght@700&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --mon-dark:    #181B34;
+  --mon-purple:  #6161FF;
+  --mon-light:   #F0F3FF;
+  --mon-green:   #00CA72;
+  --mon-yellow:  #FFCC00;
+  --mon-red:     #FB275D;
+  --pro-green:   #1A5C3A;
+  --pro-mint:    #52B788;
+  --pro-dark:    #0F2D1F;
+  --white:       #FFFFFF;
+  --gray-50:     #F9FAFB;
+  --gray-100:    #F3F4F6;
+  --gray-200:    #E5E7EB;
+  --gray-300:    #D1D5DB;
+  --gray-400:    #9CA3AF;
+  --gray-500:    #6B7280;
+  --gray-600:    #4B5563;
+  --gray-700:    #374151;
+  --gray-800:    #1F2937;
+  --slide-w: 1280px;
+  --slide-h: 720px;
+}
+
+html, body {
+  width: 100%; height: 100%;
+  background: transparent;
+  display: flex; align-items: center; justify-content: center;
+  font-family: 'Figtree', sans-serif;
+  overflow: hidden;
+  user-select: none;
+}
+
+#deck {
+  position: absolute; left: 50%; top: 50%; transform-origin: 50% 50%;
+  transform: translate(-50%, -50%) scale(var(--fit, 1));
+  flex: none;
+  width: var(--slide-w);
+  height: var(--slide-h);
+  overflow: hidden;
+  border-radius: 14px;
+  box-shadow: 0 24px 80px rgba(0,0,0,0.2), 0 2px 6px rgba(0,0,0,0.08);
+}
+
+.slide {
+  position: absolute; inset: 0;
+  width: 100%; height: 100%;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.5s cubic-bezier(.4,0,.2,1), transform 0.5s cubic-bezier(.4,0,.2,1);
+  transform: translateX(50px);
+  display: flex; flex-direction: column;
+  overflow: hidden;
+  background: var(--white);
+}
+.slide.active  { opacity: 1; pointer-events: all; transform: translateX(0); }
+.slide.exit    { opacity: 0; transform: translateX(-50px); }
+
+.top-bar { height: 4px; width: 100%; flex-shrink: 0; display: flex; }
+.top-bar span { flex: 1; }
+
+#progress-bar {
+  position: absolute; bottom: 0; left: 0; height: 3px;
+  background: var(--mon-purple);
+  transition: width 0.4s ease;
+  z-index: 100; border-radius: 0 2px 2px 0;
+}
+#nav-dots {
+  position: absolute; bottom: 18px; left: 50%;
+  transform: translateX(-50%);
+  display: flex; gap: 7px; z-index: 100;
+}
+.dot {
+  width: 7px; height: 7px; border-radius: 50%;
+  background: var(--gray-300);
+  cursor: pointer; transition: all 0.25s;
+}
+.dot.active { background: var(--mon-purple); transform: scale(1.4); }
+
+.nav-arrow {
+  position: absolute; top: 50%; transform: translateY(-50%);
+  z-index: 100;
+  background: rgba(255,255,255,0.95);
+  border: 1px solid var(--gray-200);
+  color: var(--mon-dark);
+  width: 38px; height: 38px; border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  cursor: pointer; font-size: 17px;
+  transition: all 0.2s;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+}
+.nav-arrow:hover { background: var(--mon-purple); color: white; border-color: var(--mon-purple); }
+#nav-prev { left: 14px; }
+#nav-next { right: 14px; }
+
+#slide-counter {
+  position: absolute; top: 12px; right: 18px; z-index: 100;
+  font-family: 'Space Mono', monospace;
+  font-size: 10px; color: var(--gray-400); letter-spacing: 2px;
+}
+.presenter-tag {
+  position: absolute; bottom: 18px; left: 64px;
+  font-size: 10px; color: var(--gray-400);
+  letter-spacing: 1px; font-weight: 600; text-transform: uppercase;
+}
+#hint {
+  position: absolute; bottom: 18px; right: 64px;
+  font-size: 10px; color: var(--gray-400);
+  letter-spacing: 1px; z-index: 100;
+  font-family: 'Space Mono', monospace;
+}
+
+/* shared */
+.eyebrow {
+  font-size: 10px; font-weight: 700;
+  letter-spacing: 3px; text-transform: uppercase; margin-bottom: 10px;
+}
+.slide-title {
+  font-size: 50px; font-weight: 900;
+  line-height: 1.02; letter-spacing: -2px; color: var(--mon-dark);
+}
+.slide-header { padding: 30px 64px 0; }
+
+.tag-pill {
+  display: inline-flex; align-items: center; gap: 8px;
+  border-radius: 100px; padding: 5px 14px;
+  font-size: 10px; font-weight: 700;
+  letter-spacing: 2px; text-transform: uppercase;
+  width: fit-content; margin-bottom: 16px;
+}
+.tag-purple { background: rgba(97,97,255,0.1); color: var(--mon-purple); border: 1px solid rgba(97,97,255,0.22); }
+.tag-green  { background: rgba(0,202,114,0.1); color: #008F4F; border: 1px solid rgba(0,202,114,0.28); }
+.tag-red    { background: rgba(251,39,93,0.1); color: var(--mon-red); border: 1px solid rgba(251,39,93,0.22); }
+.tag-mint   { background: rgba(82,183,136,0.1); color: var(--pro-green); border: 1px solid rgba(82,183,136,0.28); }
+
+/* ═══ SLIDE 1 ═══ */
+#s1 { background: var(--white); }
+.s1-layout { display: flex; flex: 1; }
+.s1-left {
+  flex: 1; padding: 50px 60px 50px 64px;
+  display: flex; flex-direction: column; justify-content: center;
+  border-right: 1px solid var(--gray-100);
+}
+.s1-right {
+  width: 320px; background: var(--gray-50);
+  border-left: 1px solid var(--gray-100);
+  display: flex; flex-direction: column; align-items: center;
+  justify-content: center; gap: 20px; padding: 36px 32px;
+}
+.s1-headline {
+  font-size: 74px; font-weight: 900;
+  color: var(--mon-dark); line-height: 0.95; letter-spacing: -3px; margin-bottom: 6px;
+}
+.s1-headline .purple { color: var(--mon-purple); }
+.s1-sub {
+  font-size: 17px; color: var(--gray-500);
+  line-height: 1.65; max-width: 520px; margin-top: 18px; margin-bottom: 34px;
+}
+.s1-divider { width: 44px; height: 3px; background: var(--mon-purple); border-radius: 2px; margin-bottom: 18px; }
+.s1-team { font-size: 12px; color: var(--gray-400); letter-spacing: 0.3px; font-weight: 500; }
+
+.brand-card {
+  background: var(--white); border: 1px solid var(--gray-200);
+  border-radius: 14px; padding: 20px 22px; width: 100%;
+  display: flex; flex-direction: column; align-items: center; gap: 8px;
+  box-shadow: 0 1px 6px rgba(0,0,0,0.05);
+}
+.brand-label { font-size: 9px; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; color: var(--gray-400); }
+.brand-name-pro { font-size: 22px; font-weight: 900; color: var(--pro-green); letter-spacing: -0.5px; }
+.brand-sub { font-size: 11px; color: var(--gray-400); font-weight: 500; text-align: center; }
+.x-sep { font-size: 10px; color: var(--gray-300); letter-spacing: 2px; font-weight: 600; }
+.mon-row { display: flex; align-items: center; gap: 7px; }
+.mon-dot-sm { width: 10px; height: 10px; border-radius: 50%; }
+.mon-word { font-size: 16px; font-weight: 900; color: var(--mon-dark); letter-spacing: -0.3px; }
+
+/* ═══ SLIDE 2 ═══ */
+.stat-grid {
+  display: grid; grid-template-columns: repeat(4,1fr);
+  gap: 14px; padding: 24px 64px 0; flex: 1;
+}
+.stat-card {
+  border: 1px solid var(--gray-200); border-radius: 13px;
+  padding: 22px 20px; display: flex; flex-direction: column; gap: 8px;
+  position: relative; overflow: hidden; background: var(--white);
+}
+.stat-card::before { content:''; position:absolute; top:0; left:0; right:0; height:3px; }
+.stat-card:nth-child(1)::before { background: var(--mon-purple); }
+.stat-card:nth-child(2)::before { background: var(--pro-mint); }
+.stat-card:nth-child(3)::before { background: var(--mon-yellow); }
+.stat-card:nth-child(4)::before { background: var(--mon-green); }
+.stat-icon-box {
+  width: 36px; height: 36px; border-radius: 9px;
+  display: flex; align-items: center; justify-content: center; margin-bottom: 4px;
+}
+.stat-val { font-size: 40px; font-weight: 900; color: var(--mon-dark); letter-spacing: -1.5px; }
+.stat-label { font-size: 13.5px; color: var(--gray-500); line-height: 1.5; font-weight: 500; }
+.client-strip {
+  padding: 16px 64px; font-size: 12px; color: var(--gray-400);
+  border-top: 1px solid var(--gray-100); margin-top: 14px;
+}
+.client-strip strong { color: var(--gray-700); }
+.tagline-bar { background: var(--pro-dark); padding: 18px 64px; font-size: 16px; color: var(--pro-mint); font-weight: 600; font-style: italic; }
+
+/* ═══ SLIDE 3 ═══ */
+.s3-body { display: flex; flex: 1; overflow: hidden; }
+.half-left {
+  width: 42%; padding: 48px 44px 48px 64px;
+  display: flex; flex-direction: column; justify-content: center;
+  border-right: 1px solid var(--gray-100);
+}
+.half-right {
+  flex: 1; padding: 48px 64px 48px 44px;
+  display: flex; flex-direction: column; justify-content: center; gap: 16px;
+}
+.prob-headline {
+  font-size: 58px; font-weight: 900; color: var(--mon-dark);
+  line-height: 1.0; letter-spacing: -2.5px; margin-top: 10px;
+}
+.prob-headline .red { color: var(--mon-red); }
+.prob-sub { font-size: 14px; color: var(--gray-500); line-height: 1.65; margin-top: 14px; }
+.pain-row {
+  background: var(--gray-50); border: 1px solid var(--gray-200);
+  border-left: 3px solid var(--mon-red); border-radius: 11px;
+  padding: 16px 18px; display: flex; gap: 14px; align-items: flex-start;
+}
+.pain-row.yr { border-left-color: var(--mon-yellow); }
+.pain-row.pu { border-left-color: var(--mon-purple); }
+.pain-icon-box {
+  width: 34px; height: 34px; border-radius: 8px;
+  display: flex; align-items: center; justify-content: center; flex-shrink: 0; margin-top: 1px;
+}
+.pain-title { font-size: 16px; font-weight: 700; color: var(--mon-dark); margin-bottom: 3px; }
+.pain-desc { font-size: 13.5px; color: var(--gray-500); line-height: 1.55; }
+
+/* ═══ SLIDE 4 ═══ */
+.phase-pipeline {
+  display: grid; grid-template-columns: repeat(4,1fr);
+  gap: 14px; flex: 1; padding: 22px 64px 50px;
+}
+.phase-col { display: flex; flex-direction: column; gap: 10px; position: relative; }
+.phase-col:not(:last-child)::after {
+  content: '';
+  position: absolute; right: -10px; top: 52px;
+  width: 0; height: 0;
+  border-top: 6px solid transparent;
+  border-bottom: 6px solid transparent;
+  border-left: 8px solid var(--gray-300);
+  z-index: 2;
+}
+.phase-num {
+  font-family: 'Space Mono', monospace;
+  font-size: 10px; font-weight: 700; letter-spacing: 2px;
+  padding-bottom: 8px; border-bottom: 2px solid; width: fit-content;
+}
+.phase-col:nth-child(1) .phase-num { color: var(--mon-purple); border-color: var(--mon-purple); }
+.phase-col:nth-child(2) .phase-num { color: #008F4F; border-color: var(--mon-green); }
+.phase-col:nth-child(3) .phase-num { color: #8A6A00; border-color: var(--mon-yellow); }
+.phase-col:nth-child(4) .phase-num { color: var(--mon-red); border-color: var(--mon-red); }
+.phase-card {
+  background: var(--gray-50); border: 1px solid var(--gray-200);
+  border-radius: 13px; padding: 22px 20px; flex: 1;
+  display: flex; flex-direction: column; gap: 10px;
+  position: relative; overflow: hidden;
+}
+.phase-card::before { content:''; position:absolute; top:0; left:0; right:0; height:3px; }
+.phase-col:nth-child(1) .phase-card::before { background: var(--mon-purple); }
+.phase-col:nth-child(2) .phase-card::before { background: var(--mon-green); }
+.phase-col:nth-child(3) .phase-card::before { background: var(--mon-yellow); }
+.phase-col:nth-child(4) .phase-card::before { background: var(--mon-red); }
+.phase-icon-box {
+  width: 38px; height: 38px; border-radius: 9px;
+  display: flex; align-items: center; justify-content: center; margin-bottom: 2px;
+}
+.phase-name { font-size: 18px; font-weight: 800; color: var(--mon-dark); letter-spacing: -0.4px; }
+.phase-blurb { font-size: 13.5px; color: var(--gray-500); line-height: 1.55; }
+.pipeline-note { padding: 0 64px 46px; font-size: 12px; color: var(--gray-400); font-style: italic; }
+
+/* ═══ SLIDES 5-8 two-column ═══ */
+.two-main { display: flex; flex: 1; overflow: hidden; }
+.col-left {
+  padding: 48px 44px 48px 64px;
+  display: flex; flex-direction: column; justify-content: center;
+  border-right: 1px solid var(--gray-100);
+}
+.col-left.w48 { width: 48%; }
+.col-left.w44 { width: 44%; }
+.col-right {
+  flex: 1; padding: 48px 64px 48px 44px;
+  display: flex; flex-direction: column; justify-content: center;
+}
+.col-right.center { align-items: center; justify-content: center; }
+
+.phase-title {
+  font-size: 52px; font-weight: 900; color: var(--mon-dark);
+  line-height: 0.97; letter-spacing: -2px; margin-bottom: 12px;
+}
+.phase-desc { font-size: 16px; color: var(--gray-500); line-height: 1.65; margin-bottom: 22px; }
+
+.step-list { display: flex; flex-direction: column; gap: 13px; }
+.step-item { display: flex; gap: 11px; align-items: flex-start; }
+.step-num {
+  width: 24px; height: 24px; border-radius: 50%;
+  background: var(--mon-purple);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 11px; font-weight: 700; color: white;
+  flex-shrink: 0; margin-top: 1px;
+}
+.step-text { font-size: 15px; color: var(--gray-700); line-height: 1.5; padding-top: 1px; }
+
+.output-card { background: var(--gray-50); border: 1px solid var(--gray-200); border-radius: 13px; overflow: hidden; }
+.output-hdr {
+  background: var(--mon-purple); padding: 12px 18px;
+  font-size: 10px; font-weight: 700; color: white; letter-spacing: 2px; text-transform: uppercase;
+}
+.output-body { padding: 20px; display: flex; flex-direction: column; gap: 13px; }
+.output-row { display: flex; gap: 10px; align-items: center; }
+.output-text { font-size: 14px; color: var(--gray-700); }
+
+/* slide 6 */
+.two-col-body {
+  display: grid; grid-template-columns: 1fr 1fr;
+  gap: 18px; padding: 22px 64px 44px; flex: 1;
+}
+.feat-block {
+  background: var(--gray-50); border: 1px solid var(--gray-200);
+  border-radius: 13px; padding: 22px;
+  display: flex; flex-direction: column; gap: 14px;
+  position: relative; overflow: hidden;
+}
+.feat-block::before { content:''; position:absolute; top:0; left:0; right:0; height:3px; }
+.feat-block.fp::before { background: var(--mon-purple); }
+.feat-block.fg::before { background: var(--mon-green); }
+.block-label { font-size: 10px; font-weight: 700; letter-spacing: 2.5px; text-transform: uppercase; color: var(--gray-400); }
+.block-items { display: flex; flex-direction: column; gap: 12px; }
+.block-item { display: flex; gap: 11px; align-items: flex-start; }
+.block-icon-box {
+  width: 30px; height: 30px; border-radius: 7px;
+  display: flex; align-items: center; justify-content: center; flex-shrink: 0;
+}
+.block-item-text { font-size: 15px; color: var(--gray-700); line-height: 1.5; padding-top: 4px; }
+.capture-list { display: flex; flex-direction: column; gap: 8px; }
+.cap-row {
+  display: flex; align-items: center; gap: 11px;
+  background: white; border: 1px solid var(--gray-200);
+  border-radius: 7px; padding: 11px 14px;
+  font-size: 14.5px; color: var(--gray-700);
+}
+
+/* slide 7 */
+.dash-grid {
+  display: grid; grid-template-columns: repeat(3,1fr);
+  grid-template-rows: 1fr 1fr;
+  gap: 13px; padding: 18px 64px 44px; flex: 1;
+}
+.dash-card {
+  background: var(--gray-50); border: 1px solid var(--gray-200);
+  border-radius: 12px; padding: 20px 20px;
+  display: flex; flex-direction: column; gap: 9px;
+  position: relative; overflow: hidden;
+}
+.dash-card::after { content:''; position:absolute; left:0; top:0; bottom:0; width:3px; }
+.dash-card:nth-child(1)::after { background: var(--mon-purple); }
+.dash-card:nth-child(2)::after { background: var(--mon-green); }
+.dash-card:nth-child(3)::after { background: var(--mon-yellow); }
+.dash-card:nth-child(4)::after { background: var(--mon-red); }
+.dash-card:nth-child(5)::after { background: var(--pro-mint); }
+.dash-card:nth-child(6)::after { background: var(--mon-purple); }
+.dash-icon-box {
+  width: 34px; height: 34px; border-radius: 8px;
+  display: flex; align-items: center; justify-content: center;
+}
+.dash-title { font-size: 17px; font-weight: 800; color: var(--mon-dark); }
+.dash-desc { font-size: 13.5px; color: var(--gray-500); line-height: 1.5; }
+
+/* slide 8 */
+.agent-quote {
+  font-size: 36px; font-weight: 900; color: var(--mon-dark);
+  line-height: 1.15; letter-spacing: -1px; margin-top: 12px;
+}
+.agent-quote em { color: var(--mon-purple); font-style: normal; }
+.agent-sub { font-size: 16px; color: var(--gray-500); line-height: 1.65; margin-top: 12px; margin-bottom: 20px; }
+.mon-badge {
+  display: inline-flex; align-items: center; gap: 9px;
+  background: var(--mon-light); border: 1px solid rgba(97,97,255,0.18);
+  border-radius: 100px; padding: 7px 14px; width: fit-content;
+}
+.mon-badge-dots { display: flex; gap: 5px; }
+.mon-badge-dots span { width: 8px; height: 8px; border-radius: 50%; display: block; }
+.mon-badge-label { font-size: 10.5px; font-weight: 700; color: var(--mon-purple); }
+.agent-item {
+  background: var(--gray-50); border: 1px solid var(--gray-200);
+  border-radius: 11px; padding: 15px 16px;
+  display: flex; gap: 13px; align-items: flex-start;
+}
+.agent-icon-box {
+  width: 34px; height: 34px; border-radius: 8px;
+  display: flex; align-items: center; justify-content: center; flex-shrink: 0;
+}
+.agent-title { font-size: 15px; font-weight: 700; color: var(--mon-dark); margin-bottom: 2px; }
+.agent-desc { font-size: 13px; color: var(--gray-500); line-height: 1.4; }
+
+/* slide 9 */
+.client-features { display: flex; flex-direction: column; gap: 12px; margin-top: 20px; }
+.cf-row { display: flex; gap: 11px; align-items: center; }
+.cf-dot { width: 7px; height: 7px; border-radius: 50%; flex-shrink: 0; }
+.cf-text { font-size: 15.5px; color: var(--gray-700); }
+.mock-db {
+  background: white; border-radius: 12px; overflow: hidden;
+  width: 430px; box-shadow: 0 6px 32px rgba(0,0,0,0.1), 0 0 0 1px var(--gray-200);
+}
+.mock-hdr {
+  background: var(--pro-dark); padding: 13px 18px;
+  display: flex; align-items: center; justify-content: space-between;
+}
+.mock-cname { font-size: 13px; font-weight: 800; color: white; }
+.mock-logo  { font-size: 10px; font-weight: 700; color: var(--pro-mint); letter-spacing: 1px; }
+.mock-body  { padding: 12px; display: flex; flex-direction: column; gap: 7px; }
+.mock-sec   { border-radius: 7px; overflow: hidden; border: 1px solid var(--gray-200); }
+.mock-sec-hdr {
+  background: var(--gray-50); padding: 7px 11px;
+  font-size: 10px; font-weight: 700; color: var(--gray-500);
+  letter-spacing: 1px; text-transform: uppercase;
+  display: flex; align-items: center; gap: 6px;
+}
+.mock-sec-body { padding: 7px 11px; font-size: 11px; color: #374151; line-height: 1.5; }
+.mock-actions {
+  display: grid; grid-template-columns: 1fr 1fr;
+  gap: 8px; padding: 10px 12px 12px;
+}
+.mock-btn { padding: 9px; border-radius: 7px; font-size: 12.5px; font-weight: 700; text-align: center; }
+.mock-btn.acc { background: var(--mon-green); color: var(--mon-dark); }
+.mock-btn.dec { background: #FEE2E2; color: #DC2626; }
+
+/* slide 10 */
+.why-grid {
+  display: grid; grid-template-columns: repeat(3,1fr);
+  gap: 16px; padding: 24px 64px 48px; flex: 1;
+}
+.why-card {
+  background: var(--gray-50); border: 1px solid var(--gray-200);
+  border-radius: 14px; padding: 28px 24px;
+  display: flex; flex-direction: column; gap: 13px; position: relative; overflow: hidden;
+}
+.why-card::before { content:''; position:absolute; top:0; left:0; right:0; height:4px; }
+.why-card:nth-child(1)::before { background: var(--mon-purple); }
+.why-card:nth-child(2)::before { background: var(--pro-mint); }
+.why-card:nth-child(3)::before { background: var(--mon-yellow); }
+.why-icon-box {
+  width: 42px; height: 42px; border-radius: 11px;
+  display: flex; align-items: center; justify-content: center;
+}
+.why-title { font-size: 23px; font-weight: 800; color: var(--mon-dark); letter-spacing: -0.6px; }
+.why-desc { font-size: 14.5px; color: var(--gray-500); line-height: 1.65; }
+
+/* slide 11 */
+.roadmap-grid {
+  display: grid; grid-template-columns: repeat(3,1fr);
+  gap: 16px; padding: 24px 64px 48px; flex: 1;
+}
+.rm-phase { border-radius: 12px; overflow: hidden; border: 1px solid var(--gray-200); display: flex; flex-direction: column; }
+.rm-hdr { padding: 16px 20px; }
+.rm-phase:nth-child(1) .rm-hdr { background: var(--mon-purple); }
+.rm-phase:nth-child(2) .rm-hdr { background: var(--mon-yellow); }
+.rm-phase:nth-child(3) .rm-hdr { background: var(--mon-green); }
+.rm-label { font-size: 12px; font-weight: 800; letter-spacing: 0.5px; text-transform: uppercase; }
+.rm-phase:nth-child(1) .rm-label { color: white; }
+.rm-phase:nth-child(2) .rm-label, .rm-phase:nth-child(3) .rm-label { color: var(--mon-dark); }
+.rm-time { font-size: 10px; font-family: 'Space Mono', monospace; margin-top: 2px; }
+.rm-phase:nth-child(1) .rm-time { color: rgba(255,255,255,0.6); }
+.rm-phase:nth-child(2) .rm-time, .rm-phase:nth-child(3) .rm-time { color: rgba(24,27,52,0.5); }
+.rm-body { background: var(--gray-50); padding: 16px 20px; flex: 1; display: flex; flex-direction: column; gap: 9px; }
+.rm-phase-title { font-size: 17px; font-weight: 800; color: var(--mon-dark); margin-bottom: 3px; }
+.rm-item { display: flex; gap: 9px; align-items: flex-start; font-size: 12.5px; color: var(--gray-500); line-height: 1.5; }
+.rm-dot { width: 5px; height: 5px; border-radius: 50%; background: var(--gray-300); flex-shrink: 0; margin-top: 6px; }
+
+/* slide 12 */
+.team-grid {
+  display: grid; grid-template-columns: repeat(4,1fr);
+  gap: 12px; padding: 24px 64px 48px; flex: 1;
+}
+.team-card {
+  background: var(--gray-50); border: 1px solid var(--gray-200);
+  border-radius: 13px; padding: 20px 14px;
+  display: flex; flex-direction: column; align-items: center; gap: 10px; text-align: center;
+}
+.avatar {
+  width: 50px; height: 50px; border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 19px; font-weight: 900; color: white;
+}
+.member-name { font-size: 14.5px; font-weight: 800; color: var(--mon-dark); }
+.member-role { font-size: 11px; color: var(--gray-500); line-height: 1.4; font-weight: 500; }
+
+/* slide 13 */
+.closing-layout {
+  flex: 1; display: flex; align-items: center; justify-content: center;
+  flex-direction: column; text-align: center; padding: 0 100px; gap: 16px;
+}
+.closing-eye { font-size: 10px; letter-spacing: 3px; text-transform: uppercase; color: var(--mon-purple); font-weight: 700; }
+.closing-head {
+  font-size: 68px; font-weight: 900; color: var(--mon-dark);
+  line-height: 0.97; letter-spacing: -2.5px;
+}
+.closing-head .purple { color: var(--mon-purple); }
+.closing-sub { font-size: 20px; color: var(--gray-500); max-width: 620px; line-height: 1.65; }
+.closing-div { width: 44px; height: 3px; background: var(--mon-purple); border-radius: 2px; margin: 2px auto; }
+.closing-dots { display: flex; gap: 9px; }
+.cdot { width: 12px; height: 12px; border-radius: 50%; }
+.closing-team { font-size: 12px; color: var(--gray-400); letter-spacing: 0.3px; margin-top: 4px; }
+
+/* animations */
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(16px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+.slide.active .a1 { animation: fadeUp 0.42s 0.04s both; }
+.slide.active .a2 { animation: fadeUp 0.42s 0.12s both; }
+.slide.active .a3 { animation: fadeUp 0.42s 0.20s both; }
+.slide.active .a4 { animation: fadeUp 0.42s 0.28s both; }
+.slide.active .a5 { animation: fadeUp 0.42s 0.36s both; }
+.slide.active .a6 { animation: fadeUp 0.42s 0.44s both; }
+</style>
+</head>
+<body>
+<div id="deck">
+
+<!-- SLIDE 1: COVER -->
+<div class="slide active" id="s1">
+  <div class="top-bar">
+    <span style="background:var(--mon-purple)"></span>
+    <span style="background:var(--mon-green)"></span>
+    <span style="background:var(--mon-yellow)"></span>
+    <span style="background:var(--mon-red)"></span>
+    <span style="background:var(--pro-mint)"></span>
+  </div>
+  <div class="s1-layout">
+    <div class="s1-left">
+      <div class="tag-pill tag-purple a1">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:12px;height:12px"><rect x="3" y="11" width="18" height="10" rx="2"/><circle cx="12" cy="5" r="2"/><path d="M12 7v4"/><line x1="8" y1="16" x2="8" y2="16"/><line x1="16" y1="16" x2="16" y2="16"/></svg>
+        AI Engagement System &nbsp;·&nbsp; Case Competition 2026
+      </div>
+      <div class="s1-headline a2">Adding <span class="purple">AI</span><br>to Client<br>Engagement</div>
+      <div class="s1-sub a3">A 4-phase AI pipeline that transforms how Profile researches, meets, delivers, and connects with every client, powered by monday.com.</div>
+      <div class="s1-divider a4"></div>
+      <div class="s1-team a4">Moustapha · Krishna · Carrys · Anna · Maria · Matthew · Shayla · Carlos</div>
+    </div>
+    <div class="s1-right a3">
+      <div class="brand-card">
+        <div class="brand-label">Solving for</div>
+        <div style="font-size:22px;font-weight:900;color:var(--pro-green);letter-spacing:-1px;">profile.ag</div>
+        <div class="brand-sub">ESG and Sustainability Communications</div>
+      </div>
+      <div class="x-sep">INTEGRATED WITH</div>
+      <div class="brand-card">
+        <div class="brand-label">Workflow Platform</div>
+        <div class="mon-row">
+          <div class="mon-dot-sm" style="background:var(--mon-red)"></div>
+          <div class="mon-dot-sm" style="background:var(--mon-yellow)"></div>
+          <div class="mon-dot-sm" style="background:var(--mon-green)"></div>
+          <div class="mon-word">monday.com</div>
+        </div>
+        <div class="brand-sub">Task boards, calendars and AI agents</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- SLIDE 2: WHO IS PROFILE -->
+<div class="slide" id="s2">
+  <div class="top-bar"><span style="background:var(--pro-mint);flex:1"></span></div>
+  <div class="slide-header">
+    <div class="eyebrow a1" style="color:var(--pro-green)">WHO WE ARE SOLVING FOR</div>
+    <div class="slide-title a2">Profile: ESG and Sustainability Communications</div>
+  </div>
+  <div class="stat-grid a3">
+    <div class="stat-card">
+      <div class="stat-icon-box" style="background:rgba(97,97,255,0.1)"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:17px;height:17px;color:var(--mon-purple)"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg></div>
+      <div class="stat-val">2013</div>
+      <div class="stat-label">Founded by journalist Rodrigo V Cunha. Built on ESG from day one.</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-icon-box" style="background:rgba(82,183,136,0.1)"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:17px;height:17px;color:var(--pro-green)"><circle cx="12" cy="8" r="6"/><path d="M15.477 12.89 17 22l-5-3-5 3 1.523-9.11"/></svg></div>
+      <div class="stat-val">B Corp</div>
+      <div class="stat-label">Certified 2019. First among communications agencies in Brazil and globally.</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-icon-box" style="background:rgba(255,204,0,0.12)"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:17px;height:17px;color:#8A6A00"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg></div>
+      <div class="stat-val">4 of 5</div>
+      <div class="stat-label">Top Merco Social Responsibility brands in their portfolio.</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-icon-box" style="background:rgba(0,202,114,0.1)"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:17px;height:17px;color:#008F4F"><path d="M11 20A7 7 0 0 1 9.8 6.1C15.5 5 17 4.48 19 2c1 2 2 4.18 2 8 0 5.5-4.78 10-10 10z"/><path d="M2 21c0-3 1.85-5.36 5.08-6C9.5 14.52 12 13 13 12"/></svg></div>
+      <div class="stat-val">COP30</div>
+      <div class="stat-label">Operating in Belém and Manaus. The Amazon is their strategic focus.</div>
+    </div>
+  </div>
+  <div class="client-strip a4"><strong>Key clients:</strong>&nbsp; Mercado Livre · Natura · Itaú · Ambev · Nestlé · Volkswagen · Yale · UN Foundation · B3 · VLI</div>
+  <div class="tagline-bar a5">"Reverberamos ideias que importam" · We reverberate ideas that matter.</div>
+</div>
+
+<!-- SLIDE 3: THE PROBLEM -->
+<div class="slide" id="s3">
+  <div class="top-bar"><span style="background:var(--mon-red);flex:1"></span></div>
+  <div class="s3-body">
+    <div class="half-left">
+      <div class="eyebrow a1" style="color:var(--mon-red)">THE PROBLEM</div>
+      <div class="prob-headline a2">Client<br>engagement<br>is <span class="red">broken.</span></div>
+      <div class="prob-sub a3">Profile's pre-client process is slow, manual, and disconnected. Before the first call, hours are already wasted and insights keep slipping through.</div>
+    </div>
+    <div class="half-right">
+      <div class="pain-row a2">
+        <div class="pain-icon-box" style="background:rgba(251,39,93,0.1)"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:17px;height:17px;color:var(--mon-red)"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg></div>
+        <div>
+          <div class="pain-title">Hours of manual research</div>
+          <div class="pain-desc">Planners dig through client websites one by one with no structure, no templates, and no consistency across the team.</div>
+        </div>
+      </div>
+      <div class="pain-row yr a3">
+        <div class="pain-icon-box" style="background:rgba(255,204,0,0.12)"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:17px;height:17px;color:#8A6A00"><path d="M12 2a3 3 0 0 0-3 3v7a3 3 0 0 0 6 0V5a3 3 0 0 0-3-3z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/><line x1="12" y1="19" x2="12" y2="22"/></svg></div>
+        <div>
+          <div class="pain-title">Meeting insights get lost</div>
+          <div class="pain-desc">Notes are scattered, transcriptions are informal, and key client goals disappear between the call and the proposal.</div>
+        </div>
+      </div>
+      <div class="pain-row pu a4">
+        <div class="pain-icon-box" style="background:rgba(97,97,255,0.1)"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:17px;height:17px;color:var(--mon-purple)"><path d="m7.5 4.27 9 5.15"/><path d="M21 8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16Z"/><path d="m3.3 7 8.7 5 8.7-5"/><path d="M12 22V12"/></svg></div>
+        <div>
+          <div class="pain-title">Delivery is slow and fragmented</div>
+          <div class="pain-desc">Strategy, creative concepts, and next steps live in separate tools. The client waits days for a response that should take hours.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- SLIDE 4: SOLUTION OVERVIEW -->
+<div class="slide" id="s4">
+  <div class="top-bar"><span style="background:var(--mon-purple);flex:1"></span></div>
+  <div class="slide-header">
+    <div class="eyebrow a1" style="color:var(--mon-purple)">OUR SOLUTION</div>
+    <div class="slide-title a2">A 4-Phase AI System for Client Engagement</div>
+  </div>
+  <div class="phase-pipeline a3">
+    <div class="phase-col">
+      <div class="phase-num">PHASE 01</div>
+      <div class="phase-card">
+        <div class="phase-icon-box" style="background:rgba(97,97,255,0.1)"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:19px;height:19px;color:var(--mon-purple)"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg></div>
+        <div class="phase-name">Pre-Meeting Research</div>
+        <div class="phase-blurb">AI scrapes the client's website before any call is scheduled, generating a full company brief automatically.</div>
+      </div>
+    </div>
+    <div class="phase-col">
+      <div class="phase-num">PHASE 02</div>
+      <div class="phase-card">
+        <div class="phase-icon-box" style="background:rgba(0,202,114,0.1)"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:19px;height:19px;color:#008F4F"><path d="M12 2a3 3 0 0 0-3 3v7a3 3 0 0 0 6 0V5a3 3 0 0 0-3-3z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/><line x1="12" y1="19" x2="12" y2="22"/></svg></div>
+        <div class="phase-name">Live Meeting and Transcription</div>
+        <div class="phase-blurb">AI joins the call as a silent participant, transcribing everything and tagging goals, pain points, and action items in real time.</div>
+      </div>
+    </div>
+    <div class="phase-col">
+      <div class="phase-num">PHASE 03</div>
+      <div class="phase-card">
+        <div class="phase-icon-box" style="background:rgba(255,204,0,0.12)"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:19px;height:19px;color:#8A6A00"><rect x="3" y="3" width="7" height="9" rx="1"/><rect x="14" y="3" width="7" height="5" rx="1"/><rect x="14" y="12" width="7" height="9" rx="1"/><rect x="3" y="16" width="7" height="5" rx="1"/></svg></div>
+        <div class="phase-name">Internal Dashboard</div>
+        <div class="phase-blurb">Research and transcript flow into one workspace with strategy, AI art, next steps, and monday.com task creation.</div>
+      </div>
+    </div>
+    <div class="phase-col">
+      <div class="phase-num">PHASE 04</div>
+      <div class="phase-card">
+        <div class="phase-icon-box" style="background:rgba(251,39,93,0.1)"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:19px;height:19px;color:var(--mon-red)"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg></div>
+        <div class="phase-name">Client Dashboard</div>
+        <div class="phase-blurb">A polished, branded deliverable sent directly to the client with visuals, strategy, a calendar, and a one-click Accept button.</div>
+      </div>
+    </div>
+  </div>
+  <div class="pipeline-note a4">Fully integrated from the first search to the client's signed approval.</div>
+</div>
+
+<!-- SLIDE 5: PHASE 1 RESEARCH -->
+<div class="slide" id="s5">
+  <div class="top-bar"><span style="background:var(--mon-purple);flex:1"></span></div>
+  <div class="two-main">
+    <div class="col-left w48">
+      <div class="tag-pill tag-purple a1">Phase 01 · Research</div>
+      <div class="phase-title a2">Pre-Meeting<br>Research AI</div>
+      <div class="phase-desc a3">Before the first call is scheduled, AI builds a complete client brief so your planner walks in knowing everything.</div>
+      <div class="step-list a4">
+        <div class="step-item"><div class="step-num">1</div><div class="step-text">AI receives the client's name or website URL</div></div>
+        <div class="step-item"><div class="step-num">2</div><div class="step-text">Scrapes their site for mission, ESG positioning, services, and tone of voice</div></div>
+        <div class="step-item"><div class="step-num">3</div><div class="step-text">Pulls social presence, press mentions, and competitor landscape</div></div>
+        <div class="step-item"><div class="step-num">4</div><div class="step-text">Delivers a structured brief before the first hello</div></div>
+      </div>
+    </div>
+    <div class="col-right a4">
+      <div class="output-card">
+        <div class="output-hdr">Auto-Generated Client Brief</div>
+        <div class="output-body">
+          <div class="output-row"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:15px;height:15px;color:var(--mon-green);flex-shrink:0"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg><span class="output-text">Company overview and mission statement</span></div>
+          <div class="output-row"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:15px;height:15px;color:var(--mon-green);flex-shrink:0"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg><span class="output-text">ESG and sustainability positioning</span></div>
+          <div class="output-row"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:15px;height:15px;color:var(--mon-green);flex-shrink:0"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg><span class="output-text">Key services and market differentiators</span></div>
+          <div class="output-row"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:15px;height:15px;color:var(--mon-green);flex-shrink:0"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg><span class="output-text">Tone of voice and brand identity</span></div>
+          <div class="output-row"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:15px;height:15px;color:var(--mon-green);flex-shrink:0"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg><span class="output-text">Competitor landscape and industry context</span></div>
+          <div class="output-row"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:15px;height:15px;color:var(--mon-green);flex-shrink:0"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg><span class="output-text">Recommended talking points for the meeting</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- SLIDE 6: PHASE 2 MEETING -->
+<div class="slide" id="s6">
+  <div class="top-bar"><span style="background:var(--mon-green);flex:1"></span></div>
+  <div class="slide-header">
+    <div class="eyebrow a1" style="color:#008F4F">Phase 02 · Meeting</div>
+    <div class="slide-title a2">The Meeting: AI Joins the Room</div>
+  </div>
+  <div class="two-col-body a3">
+    <div class="feat-block fp">
+      <div class="block-label">During the Call</div>
+      <div class="block-items">
+        <div class="block-item">
+          <div class="block-icon-box" style="background:rgba(97,97,255,0.1)"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:15px;height:15px;color:var(--mon-purple)"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><line x1="23" y1="9" x2="17" y2="15"/><line x1="17" y1="9" x2="23" y2="15"/></svg></div>
+          <div class="block-item-text">AI joins as a silent participant with no friction for the client</div>
+        </div>
+        <div class="block-item">
+          <div class="block-icon-box" style="background:rgba(97,97,255,0.1)"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:15px;height:15px;color:var(--mon-purple)"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg></div>
+          <div class="block-item-text">Real-time transcription captures every word as it is spoken</div>
+        </div>
+        <div class="block-item">
+          <div class="block-icon-box" style="background:rgba(97,97,255,0.1)"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:15px;height:15px;color:var(--mon-purple)"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/></svg></div>
+          <div class="block-item-text">Flags client goals, pain points, and priority phrases automatically</div>
+        </div>
+        <div class="block-item">
+          <div class="block-icon-box" style="background:rgba(97,97,255,0.1)"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:15px;height:15px;color:var(--mon-purple)"><line x1="12" y1="17" x2="12" y2="22"/><path d="M5 17h14v-1.76a2 2 0 0 0-1.11-1.79l-1.78-.9A2 2 0 0 1 15 10.76V6h1a2 2 0 0 0 0-4H8a2 2 0 0 0 0 4h1v4.76a2 2 0 0 1-1.11 1.79l-1.78.9A2 2 0 0 0 5 15.24Z"/></svg></div>
+          <div class="block-item-text">Tags agreed action items before the call even ends</div>
+        </div>
+      </div>
+    </div>
+    <div class="feat-block fg">
+      <div class="block-label">What Gets Captured</div>
+      <div class="capture-list">
+        <div class="cap-row"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:13px;height:13px;color:#008F4F;flex-shrink:0"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>Full meeting transcript</div>
+        <div class="cap-row"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:13px;height:13px;color:#008F4F;flex-shrink:0"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>Client goals and expectations</div>
+        <div class="cap-row"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:13px;height:13px;color:#008F4F;flex-shrink:0"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>Key quotes in the client's exact language</div>
+        <div class="cap-row"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:13px;height:13px;color:#008F4F;flex-shrink:0"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>Challenges and pain points</div>
+        <div class="cap-row"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:13px;height:13px;color:#008F4F;flex-shrink:0"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>Budget signals and timeline hints</div>
+        <div class="cap-row"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:13px;height:13px;color:#008F4F;flex-shrink:0"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>Agreed next steps</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- SLIDE 7: PHASE 3 DASHBOARD -->
+<div class="slide" id="s7">
+  <div class="top-bar"><span style="background:var(--mon-yellow);flex:1"></span></div>
+  <div class="slide-header">
+    <div class="eyebrow a1" style="color:#8A6A00">Phase 03 · Internal Dashboard</div>
+    <div class="slide-title a2">Everything flows into one workspace</div>
+  </div>
+  <div class="dash-grid a3">
+    <div class="dash-card">
+      <div class="dash-icon-box" style="background:rgba(97,97,255,0.1)"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:17px;height:17px;color:var(--mon-purple)"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg></div>
+      <div class="dash-title">Client Overview</div>
+      <div class="dash-desc">Pre-research and transcript merged into a clean, structured client snapshot for the whole team.</div>
+    </div>
+    <div class="dash-card">
+      <div class="dash-icon-box" style="background:rgba(0,202,114,0.1)"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:17px;height:17px;color:#008F4F"><path d="M9.5 2A2.5 2.5 0 0 1 12 4.5v15a2.5 2.5 0 0 1-4.96.44 2.5 2.5 0 0 1-2.96-3.08 3 3 0 0 1-.34-5.58 2.5 2.5 0 0 1 1.32-4.24 2.5 2.5 0 0 1 1.98-3A2.5 2.5 0 0 1 9.5 2Z"/><path d="M14.5 2A2.5 2.5 0 0 0 12 4.5v15a2.5 2.5 0 0 0 4.96.44 2.5 2.5 0 0 0 2.96-3.08 3 3 0 0 0 .34-5.58 2.5 2.5 0 0 0-1.32-4.24 2.5 2.5 0 0 0-1.98-3A2.5 2.5 0 0 0 14.5 2Z"/></svg></div>
+      <div class="dash-title">Strategy</div>
+      <div class="dash-desc">AI-recommended communication approach tailored to the client's ESG goals and brand voice.</div>
+    </div>
+    <div class="dash-card">
+      <div class="dash-icon-box" style="background:rgba(255,204,0,0.12)"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:17px;height:17px;color:#8A6A00"><polyline points="9 11 12 14 22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg></div>
+      <div class="dash-title">Plans and Next Steps</div>
+      <div class="dash-desc">Actionable breakdown of what to build, what to say, and when to deliver it.</div>
+    </div>
+    <div class="dash-card">
+      <div class="dash-icon-box" style="background:rgba(251,39,93,0.1)"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:17px;height:17px;color:var(--mon-red)"><circle cx="13.5" cy="6.5" r=".5"/><circle cx="17.5" cy="10.5" r=".5"/><circle cx="8.5" cy="7.5" r=".5"/><circle cx="6.5" cy="12.5" r=".5"/><path d="M12 2C6.5 2 2 6.5 2 12s4.5 10 10 10c.926 0 1.648-.746 1.648-1.688 0-.437-.18-.835-.437-1.125-.29-.289-.438-.652-.438-1.125a1.64 1.64 0 0 1 1.668-1.668h1.996c3.051 0 5.555-2.503 5.555-5.554C21.965 6.012 17.461 2 12 2z"/></svg></div>
+      <div class="dash-title">AI-Generated Art</div>
+      <div class="dash-desc">Visual concepts and moodboards generated from the client's brand identity and stated vision.</div>
+    </div>
+    <div class="dash-card">
+      <div class="dash-icon-box" style="background:rgba(82,183,136,0.1)"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:17px;height:17px;color:var(--pro-green)"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg></div>
+      <div class="dash-title">monday.com Sync</div>
+      <div class="dash-desc">Auto-creates tasks, deadlines, and calendar events in monday.com with no manual setup required.</div>
+    </div>
+    <div class="dash-card">
+      <div class="dash-icon-box" style="background:rgba(97,97,255,0.1)"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:17px;height:17px;color:var(--mon-purple)"><rect x="3" y="11" width="18" height="10" rx="2"/><circle cx="12" cy="5" r="2"/><path d="M12 7v4"/><line x1="8" y1="16" x2="8" y2="16"/><line x1="16" y1="16" x2="16" y2="16"/></svg></div>
+      <div class="dash-title">AI Agents</div>
+      <div class="dash-desc">Assistants that help Profile's planners write, create, and execute every deliverable faster.</div>
+    </div>
+  </div>
+</div>
+
+<!-- SLIDE 8: AI AGENTS -->
+<div class="slide" id="s8">
+  <div class="top-bar"><span style="background:var(--mon-purple);flex:1"></span></div>
+  <div class="two-main">
+    <div class="col-left w44">
+      <div class="tag-pill tag-purple a1">Phase 03 · Continued</div>
+      <div class="agent-quote a2">The planner isn't <em>replaced.</em><br>They are <em>supercharged.</em></div>
+      <div class="agent-sub a3">AI handles the logistics so planners can focus on what only humans can do: empathy, creative direction, and lasting impact.</div>
+      <div class="mon-badge a4">
+        <div class="mon-badge-dots">
+          <span style="background:var(--mon-red)"></span>
+          <span style="background:var(--mon-yellow)"></span>
+          <span style="background:var(--mon-green)"></span>
+        </div>
+        <div class="mon-badge-label">monday.com fully integrated</div>
+      </div>
+    </div>
+    <div class="col-right" style="gap:11px">
+      <div class="agent-item a2">
+        <div class="agent-icon-box" style="background:rgba(97,97,255,0.1)"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:17px;height:17px;color:var(--mon-purple)"><rect x="3" y="11" width="18" height="10" rx="2"/><circle cx="12" cy="5" r="2"/><path d="M12 7v4"/><line x1="8" y1="16" x2="8" y2="16"/><line x1="16" y1="16" x2="16" y2="16"/></svg></div>
+        <div><div class="agent-title">AI Agent co-pilots every deliverable</div><div class="agent-desc">Writes strategy docs, generates copy, and refines proposals in seconds</div></div>
+      </div>
+      <div class="agent-item a3">
+        <div class="agent-icon-box" style="background:rgba(0,202,114,0.1)"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:17px;height:17px;color:#008F4F"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg></div>
+        <div><div class="agent-title">Chatbot for real-time brainstorming</div><div class="agent-desc">Ask it to rework the strategy, adjust tone, or generate new concepts on demand</div></div>
+      </div>
+      <div class="agent-item a4">
+        <div class="agent-icon-box" style="background:rgba(255,204,0,0.12)"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:17px;height:17px;color:#8A6A00"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"/><circle cx="9" cy="9" r="2"/><polyline points="21 15 16 10 5 21"/></svg></div>
+        <div><div class="agent-title">AI image generator for visual concepts</div><div class="agent-desc">Moodboards and visual ideas ready to share, built from the client's own brief</div></div>
+      </div>
+      <div class="agent-item a5">
+        <div class="agent-icon-box" style="background:rgba(251,39,93,0.1)"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:17px;height:17px;color:var(--mon-red)"><rect x="8" y="2" width="8" height="4" rx="1" ry="1"/><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"/><line x1="12" y1="11" x2="16" y2="11"/><line x1="12" y1="16" x2="16" y2="16"/><line x1="8" y1="11" x2="8.01" y2="11"/><line x1="8" y1="16" x2="8.01" y2="16"/></svg></div>
+        <div><div class="agent-title">monday.com task board auto-populated</div><div class="agent-desc">Every strategy item becomes a task with assignees, deadlines, and calendar sync</div></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- SLIDE 9: CLIENT DASHBOARD -->
+<div class="slide" id="s9">
+  <div class="top-bar"><span style="background:var(--mon-red);flex:1"></span></div>
+  <div class="two-main">
+    <div class="col-left w44">
+      <div class="tag-pill tag-red a1">Phase 04 · Client Delivery</div>
+      <div class="phase-title a2">The Client<br>Dashboard</div>
+      <div class="phase-desc a3">A polished, branded deliverable sent straight to the client. No PDFs, no email attachments, just one link.</div>
+      <div class="client-features a4">
+        <div class="cf-row"><div class="cf-dot" style="background:var(--mon-purple)"></div><div class="cf-text">Client name and branding at the top</div></div>
+        <div class="cf-row"><div class="cf-dot" style="background:var(--mon-green)"></div><div class="cf-text">Calendar with key dates and milestones</div></div>
+        <div class="cf-row"><div class="cf-dot" style="background:var(--mon-yellow)"></div><div class="cf-text">AI-generated visual concepts and moodboard</div></div>
+        <div class="cf-row"><div class="cf-dot" style="background:var(--mon-red)"></div><div class="cf-text">Strategy overview and recommended next steps</div></div>
+        <div class="cf-row"><div class="cf-dot" style="background:var(--pro-mint)"></div><div class="cf-text">Comment section for real-time client feedback</div></div>
+        <div class="cf-row"><div class="cf-dot" style="background:var(--mon-green)"></div><div class="cf-text">One-click Accept or Decline button</div></div>
+      </div>
+    </div>
+    <div class="col-right center a3">
+      <div class="mock-db">
+        <div class="mock-hdr">
+          <div class="mock-cname">Natura · Proposal 2026</div>
+          <div class="mock-logo">profile.ag</div>
+        </div>
+        <div class="mock-body">
+          <div class="mock-sec">
+            <div class="mock-sec-hdr"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:11px;height:11px"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg> Calendar and Milestones</div>
+            <div class="mock-sec-body">Kick-off June 3 · Campaign Launch July 15 · Review Aug 1</div>
+          </div>
+          <div class="mock-sec">
+            <div class="mock-sec-hdr"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:11px;height:11px"><circle cx="13.5" cy="6.5" r=".5"/><circle cx="17.5" cy="10.5" r=".5"/><circle cx="8.5" cy="7.5" r=".5"/><circle cx="6.5" cy="12.5" r=".5"/><path d="M12 2C6.5 2 2 6.5 2 12s4.5 10 10 10c.926 0 1.648-.746 1.648-1.688 0-.437-.18-.835-.437-1.125-.29-.289-.438-.652-.438-1.125a1.64 1.64 0 0 1 1.668-1.668h1.996c3.051 0 5.555-2.503 5.555-5.554C21.965 6.012 17.461 2 12 2z"/></svg> Visual Concepts</div>
+            <div class="mock-sec-body">3 AI-generated moodboards aligned to your brand identity</div>
+          </div>
+          <div class="mock-sec">
+            <div class="mock-sec-hdr"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:11px;height:11px"><path d="M9.5 2A2.5 2.5 0 0 1 12 4.5v15a2.5 2.5 0 0 1-4.96.44 2.5 2.5 0 0 1-2.96-3.08 3 3 0 0 1-.34-5.58 2.5 2.5 0 0 1 1.32-4.24 2.5 2.5 0 0 1 1.98-3A2.5 2.5 0 0 1 9.5 2Z"/><path d="M14.5 2A2.5 2.5 0 0 0 12 4.5v15a2.5 2.5 0 0 0 4.96.44 2.5 2.5 0 0 0 2.96-3.08 3 3 0 0 0 .34-5.58 2.5 2.5 0 0 0-1.32-4.24 2.5 2.5 0 0 0-1.98-3A2.5 2.5 0 0 0 14.5 2Z"/></svg> Strategy Overview</div>
+            <div class="mock-sec-body">ESG storytelling campaign targeting Gen Z via digital and PR</div>
+          </div>
+          <div class="mock-sec">
+            <div class="mock-sec-hdr"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:11px;height:11px"><polyline points="9 11 12 14 22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg> Recommended Next Steps</div>
+            <div class="mock-sec-body">1. Approve creative direction &nbsp; 2. Confirm budget &nbsp; 3. Share brand assets</div>
+          </div>
+          <div class="mock-sec">
+            <div class="mock-sec-hdr"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:11px;height:11px"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg> Leave a Comment</div>
+            <div class="mock-sec-body" style="color:#9CA3AF;font-style:italic">Add your feedback here...</div>
+          </div>
+        </div>
+        <div class="mock-actions">
+          <div class="mock-btn acc">Accept Proposal</div>
+          <div class="mock-btn dec">Decline</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- SLIDE 10: WHY PROFILE -->
+<div class="slide" id="s10">
+  <div class="top-bar"><span style="background:var(--pro-mint);flex:1"></span></div>
+  <div class="slide-header">
+    <div class="eyebrow a1" style="color:var(--pro-green)">WHY THIS FITS PROFILE</div>
+    <div class="slide-title a2">Built for an agency that leads with purpose</div>
+  </div>
+  <div class="why-grid a3">
+    <div class="why-card">
+      <div class="why-icon-box" style="background:rgba(97,97,255,0.1)"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:21px;height:21px;color:var(--mon-purple)"><path d="M11 20A7 7 0 0 1 9.8 6.1C15.5 5 17 4.48 19 2c1 2 2 4.18 2 8 0 5.5-4.78 10-10 10z"/><path d="M2 21c0-3 1.85-5.36 5.08-6C9.5 14.52 12 13 13 12"/></svg></div>
+      <div class="why-title">Fluent in ESG</div>
+      <div class="why-desc">Profile calls itself "fluent in sustainability." AI that reads ESG reports, understands impact language, and knows the UN SDG framework from day one speaks Profile's language natively.</div>
+    </div>
+    <div class="why-card">
+      <div class="why-icon-box" style="background:rgba(82,183,136,0.1)"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:21px;height:21px;color:var(--pro-green)"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg></div>
+      <div class="why-title">Speed Before COP30</div>
+      <div class="why-desc">With COP30 in Brazil accelerating client demand in 2025, Profile needs to move fast. This system compresses weeks of onboarding into hours without losing creative quality.</div>
+    </div>
+    <div class="why-card">
+      <div class="why-icon-box" style="background:rgba(255,204,0,0.12)"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:21px;height:21px;color:#8A6A00"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg></div>
+      <div class="why-title">Scale with Soul</div>
+      <div class="why-desc">Profile's B Corp values demand authentic communication. AI handles the logistics so planners can focus on empathy, storytelling, and real impact.</div>
+    </div>
+  </div>
+</div>
+
+<!-- SLIDE 11: ROADMAP -->
+<div class="slide" id="s11">
+  <div class="top-bar"><span style="background:var(--mon-purple);flex:1"></span></div>
+  <div class="slide-header">
+    <div class="eyebrow a1" style="color:var(--mon-purple)">IMPLEMENTATION ROADMAP</div>
+    <div class="slide-title a2">From concept to full launch in 6 months</div>
+  </div>
+  <div class="roadmap-grid a3">
+    <div class="rm-phase">
+      <div class="rm-hdr"><div class="rm-label">Phase 1: MVP</div><div class="rm-time">Months 1 to 2</div></div>
+      <div class="rm-body">
+        <div class="rm-phase-title">Research and Transcription</div>
+        <div class="rm-item"><div class="rm-dot"></div>Deploy AI web scraper for automatic client research</div>
+        <div class="rm-item"><div class="rm-dot"></div>Integrate real-time meeting transcription</div>
+        <div class="rm-item"><div class="rm-dot"></div>Pilot with 2 to 3 real client onboardings</div>
+        <div class="rm-item"><div class="rm-dot"></div>Collect feedback and refine brief format</div>
+      </div>
+    </div>
+    <div class="rm-phase">
+      <div class="rm-hdr"><div class="rm-label">Phase 2: Dashboard</div><div class="rm-time">Months 3 to 4</div></div>
+      <div class="rm-body">
+        <div class="rm-phase-title">Internal Workspace and monday.com</div>
+        <div class="rm-item"><div class="rm-dot"></div>Build internal AI dashboard for planners</div>
+        <div class="rm-item"><div class="rm-dot"></div>Connect to monday.com via API for task creation</div>
+        <div class="rm-item"><div class="rm-dot"></div>Train AI agents on Profile's brand voice and ESG tone</div>
+        <div class="rm-item"><div class="rm-dot"></div>Launch AI image generation for concept work</div>
+      </div>
+    </div>
+    <div class="rm-phase">
+      <div class="rm-hdr"><div class="rm-label">Phase 3: Full Launch</div><div class="rm-time">Months 5 to 6</div></div>
+      <div class="rm-body">
+        <div class="rm-phase-title">Client Dashboard and Scale</div>
+        <div class="rm-item"><div class="rm-dot"></div>Launch client-facing proposal dashboard</div>
+        <div class="rm-item"><div class="rm-dot"></div>Add accept and decline workflow with notifications</div>
+        <div class="rm-item"><div class="rm-dot"></div>Full team onboarding across Sao Paulo, Brasilia, Belem</div>
+        <div class="rm-item"><div class="rm-dot"></div>Measure time-to-proposal and client satisfaction</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- SLIDE 12: CLOSING -->
+<div class="slide" id="s12">
+  <div class="top-bar">
+    <span style="background:var(--mon-purple)"></span>
+    <span style="background:var(--mon-green)"></span>
+    <span style="background:var(--mon-yellow)"></span>
+    <span style="background:var(--mon-red)"></span>
+    <span style="background:var(--pro-mint)"></span>
+  </div>
+  <div class="closing-layout">
+    <div class="closing-eye a1">Case Competition 2026 · Profile x monday.com</div>
+    <div class="closing-head a2">The only agency fluent in sustainability<br>deserves tools <span class="purple">fluent in its mission.</span></div>
+    <div class="closing-div a3"></div>
+    <div class="closing-sub a4">AI-powered. Purpose-driven. Built for Profile.</div>
+    <div class="closing-dots a4">
+      <div class="cdot" style="background:var(--mon-purple)"></div>
+      <div class="cdot" style="background:var(--mon-green)"></div>
+      <div class="cdot" style="background:var(--mon-yellow)"></div>
+      <div class="cdot" style="background:var(--mon-red)"></div>
+      <div class="cdot" style="background:var(--pro-mint)"></div>
+    </div>
+    <div class="closing-team a5">Moustapha · Krishna · Carrys · Anna · Maria · Matthew · Shayla · Carlos</div>
+  </div>
+</div>
+
+<!-- Chrome -->
+<div id="progress-bar"></div>
+<div id="nav-dots"></div>
+<div id="slide-counter">01 / 12</div>
+<div class="nav-arrow" id="nav-prev" onclick="changeSlide(-1)">&#8249;</div>
+<div class="nav-arrow" id="nav-next" onclick="changeSlide(1)">&#8250;</div>
+<div id="hint">arrow keys to navigate</div>
+
+</div>
+
+<script>
+  const slides = document.querySelectorAll('.slide');
+  const total  = slides.length;
+  let current  = 0;
+
+  const dotsWrap = document.getElementById('nav-dots');
+  slides.forEach((_, i) => {
+    const d = document.createElement('div');
+    d.className = 'dot' + (i === 0 ? ' active' : '');
+    d.onclick = () => goTo(i);
+    dotsWrap.appendChild(d);
+  });
+
+  function goTo(n) {
+    if (n < 0 || n >= total) return;
+    slides[current].classList.remove('active');
+    slides[current].classList.add('exit');
+    setTimeout(() => slides[current].classList.remove('exit'), 550);
+    current = n;
+    slides[current].classList.add('active');
+    document.querySelectorAll('.dot').forEach((d, i) => d.classList.toggle('active', i === current));
+    document.getElementById('slide-counter').textContent =
+      String(current + 1).padStart(2,'0') + ' / ' + String(total).padStart(2,'0');
+    document.getElementById('progress-bar').style.width = ((current + 1) / total * 100) + '%';
+  }
+
+  function changeSlide(dir) { goTo(current + dir); }
+
+  document.addEventListener('keydown', e => {
+    if (['ArrowRight','ArrowDown',' '].includes(e.key)) { e.preventDefault(); changeSlide(1); }
+    if (['ArrowLeft','ArrowUp'].includes(e.key))        { e.preventDefault(); changeSlide(-1); }
+  });
+
+  document.getElementById('progress-bar').style.width = (1 / total * 100) + '%';
+
+  // Fit the 1280x720 deck to whatever frame or window it is shown in.
+  function fit() {
+    var k = Math.min(window.innerWidth / 1280, window.innerHeight / 720);
+    document.documentElement.style.setProperty('--fit', k);
+    document.getElementById('deck').style.borderRadius = (k < 0.6 ? 14 / k * 0.5 : 14) + 'px';
+  }
+  window.addEventListener('resize', fit); fit();
+  // Swipe between slides on touch screens.
+  var sx = null, sy = null;
+  document.addEventListener('touchstart', function (e) { sx = e.touches[0].clientX; sy = e.touches[0].clientY; }, { passive: true });
+  document.addEventListener('touchend', function (e) {
+    if (sx === null) return;
+    var dx = e.changedTouches[0].clientX - sx, dy = e.changedTouches[0].clientY - sy;
+    if (Math.abs(dx) > 40 && Math.abs(dx) > Math.abs(dy)) changeSlide(dx < 0 ? 1 : -1);
+    sx = null;
+  });
+  // In the portfolio page's frame, show "click" hints instead of keyboard hints.
+  if (window.self !== window.top) document.getElementById('hint').textContent = 'click the arrows or swipe';
+</script>
+</body>
+</html>

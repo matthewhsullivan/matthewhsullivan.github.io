@@ -893,3 +893,8 @@ h1, h2, h3, .section-head h2 { letter-spacing: -.015em; }
 .deck-strip figcaption { font-size: .82rem; color: var(--ink-soft); margin-top: 8px; }
 .deck-note { color: var(--ink-soft); }
 .case-body p + p { margin-top: .75em; }
+
+/* embedded HTML pitch deck (Brazil) */
+.deck-embed { position: relative; width: 100%; aspect-ratio: 16 / 9; margin-top: 14px; border-radius: 14px; overflow: hidden;
+  background: #DDE0E8; box-shadow: 0 0 0 1px var(--rule), 0 22px 40px -26px rgba(10, 20, 40, .55); }
+.deck-embed iframe { position: absolute; inset: 0; width: 100%; height: 100%; border: 0; display: block; }
